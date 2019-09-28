@@ -1,12 +1,13 @@
 import React from 'react';
 import './Home.css';
 
-const Home = () => {
+export default () => {
   return(
     <div className='Home'>
-      <h1>Home</h1>
+      <div className="lander">
+        <h1>Food Buddy</h1>
+        <p>Your personal food assistant</p>
+      </div>
     </div>
   )
 }
-
-export default Home;

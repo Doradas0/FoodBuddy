@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
-import Home from '../Home';
+import Routes from "../../utils/Routes";
+import "./App.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Home/>
+    <div className="App container">
+      <Routes />
     </div>
   );
 }
