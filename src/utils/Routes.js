@@ -5,6 +5,7 @@ import Home from "../containers/Home";
 import RecipeBook from "../containers/RecipeBook";
 import MenuPlan from "../containers/MenuPlan";
 import Pantry from "../containers/Pantry";
+import ShoppingList from "../containers/ShoppingList";
 
 export default () =>
   <Switch>
@@ -12,6 +13,8 @@ export default () =>
     <Route path="/RecipeBook" exact component={RecipeBook} />
     <Route path="/MenuPlan" exact component={MenuPlan} />
     <Route path="/Pantry" exact component={Pantry} />
+    <Route path="/ShoppingList" exact component={ShoppingList} />
+
     { /* Finally, catch all unmatched routes */ }
     <Route component={NotFound} />
   </Switch>;

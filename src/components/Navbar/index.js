@@ -27,6 +27,8 @@ export default () => {
           <Link to="/RecipeBook" onClick={collapse}><li>Recipe Book</li></Link>
           <Link to="/MenuPlan" onClick={collapse}><li>Menu Plan</li></Link>
           <Link to="/Pantry" onClick={collapse}><li>Pantry</li></Link>
+          <Link to="/ShoppingList" onClick={collapse}><li>ShoppingList</li></Link>
+
         </ul>
       </div>
     </div>
