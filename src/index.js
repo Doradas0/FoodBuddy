@@ -3,7 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './containers/App';
 import { BrowserRouter as Router } from "react-router-dom";
-import * as serviceWorker from './serviceWorker';
+import Amplify from "aws-amplify";
+
+Amplify.configure({
+  Auth: {
+    mandatorySignIn: false,
+    region: "eu-west-1",
+    userPoolId: "eu-west-1_EzyJ1xQBC",
+    identityPoolId: "eu-west-1:fd38b2ef-bd80-403f-ae70-9d819f53eb9e",
+    userPoolWebClientId: "56081sjmce6iu0s98dcbve51sr"
+  },
+})
 
 ReactDOM.render(
   <Router>
@@ -11,9 +21,3 @@ ReactDOM.render(
   </Router>,
   document.getElementById("root")
 );
-
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
