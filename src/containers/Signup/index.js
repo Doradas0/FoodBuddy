@@ -1,10 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import SignupForm from "../../components/SignupForm";
+import ConfirmUserForm from "../../components/ConfirmUserForm";
 
-export default () => {
+export default (props) => {
+
+  const [codeSent, setCodeSent] = useState(false);
+  const [email, setEmail] = useState("");
+
   return(
     <div className="Signup">
-      <SignupForm />
+      {!codeSent
+        ? <SignupForm setEmail={setEmail} setCodeSent={setCodeSent}/>
+        : <ConfirmUserForm email={email} props={props}/>
+      }
+
     </div>
   )
 }

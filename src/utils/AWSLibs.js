@@ -11,9 +11,20 @@ export const signIn = async (username, password) => {
 
 export const signUp = async (username, password) => {
   try {
-    const newUser = await Auth.signUp({
+    await Auth.signUp({
       username,
       password
+    });
+  }catch (e) {
+    alert(e.message);
+  }
+}
+
+export const confirmSignUp = async (username, code) => {
+  try {
+    await Auth.confirmSignUp({
+      username,
+      code
     });
   }catch (e) {
     alert(e.message);

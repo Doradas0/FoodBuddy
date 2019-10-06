@@ -3,10 +3,17 @@ import "./SignupForm.css";
 import useForm from "../../utils/Hooks";
 import {signUp} from "../../utils/AWSLibs";
 
-export default () => {
+export default (setEmail, setCodeSent) => {
 
-  const handleSignup = () => {
-    signUp(inputs.username, inputs.password);
+  const handleSignup = async () => {
+    try {
+      await signUp(inputs.username, inputs.password);
+    }catch (e) {
+      console.log(e);
+      return;
+    }
+    setEmail(() => inputs.username);
+    setCodeSent(() => true);
   }
   const initialValues = {username:"", password:"", passwordConfirm:""}
   const {inputs, handleInputChange, handleSubmit, handleOnClick} = useForm(handleSignup, initialValues);
