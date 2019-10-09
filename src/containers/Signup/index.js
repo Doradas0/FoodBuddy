@@ -11,7 +11,7 @@ export default (props) => {
     <div className="Signup">
       {!codeSent
         ? <SignupForm setEmail={setEmail} setCodeSent={setCodeSent}/>
-        : <ConfirmUserForm email={email} props={props}/>
+        : <ConfirmUserForm username={email} props={props}/>
       }
 
     </div>

@@ -1,20 +1,23 @@
 import React from "react";
 import "./SignupForm.css";
 import useForm from "../../utils/Hooks";
-import {signUp} from "../../utils/AWSLibs";
+import {Auth} from "aws-amplify";
 
-export default (setEmail, setCodeSent) => {
+export default ({setEmail, setCodeSent}) => {
 
   const handleSignup = async () => {
+    const username = inputs.username;
+    const password = inputs.password
     try {
-      await signUp(inputs.username, inputs.password);
+      await Auth.signUp({username,password});
+      setEmail(() => inputs.username);
+      setCodeSent(() => true);
     }catch (e) {
-      console.log(e);
+      alert(e.message);
       return;
     }
-    setEmail(() => inputs.username);
-    setCodeSent(() => true);
   }
+
   const initialValues = {username:"", password:"", passwordConfirm:""}
   const {inputs, handleInputChange, handleSubmit, handleOnClick} = useForm(handleSignup, initialValues);
 
