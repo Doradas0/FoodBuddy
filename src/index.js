@@ -4,14 +4,15 @@ import './index.css';
 import App from './containers/App';
 import { BrowserRouter as Router } from "react-router-dom";
 import Amplify from "aws-amplify";
+import Config from "./utils/Config";
 
 Amplify.configure({
   Auth: {
-    mandatorySignIn: false,
-    region: "eu-west-1",
-    userPoolId: "eu-west-1_EzyJ1xQBC",
-    identityPoolId: "eu-west-1:fd38b2ef-bd80-403f-ae70-9d819f53eb9e",
-    userPoolWebClientId: "56081sjmce6iu0s98dcbve51sr"
+    mandatorySignIn: true,
+    region: Config.cognito.REGION,
+    userPoolId: Config.cognito.USER_POOL_ID,
+    identityPoolId: Config.cognito.IDENTITY_POOL_ID,
+    userPoolWebClientId: Config.cognito.APP_CLIENT_ID
   },
 })
 
