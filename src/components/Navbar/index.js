@@ -4,23 +4,29 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./Navbar.css";
 
-export default () => {
+export default ({isAuthenticated, userHasAuthenticated, handleLogout}) => {
+
   return(
     <Navbar fluid collapseOnSelect>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link to="/">Scratch</Link>
+          <Link to="/">Food Buddy</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav pullRight>
-          <LinkContainer to="/signup">
-            <NavItem>Signup</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/login">
-            <NavItem>Login</NavItem>
-          </LinkContainer>
+        {isAuthenticated
+          ? <NavItem onClick={handleLogout}>Logout</NavItem>
+          : <>
+              <LinkContainer to="/signup">
+                <NavItem>Signup</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <NavItem>Login</NavItem>
+              </LinkContainer>
+            </>
+          }
         </Nav>
       </Navbar.Collapse>
     </Navbar>

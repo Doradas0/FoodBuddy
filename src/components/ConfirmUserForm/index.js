@@ -23,19 +23,19 @@ export default ({username, props}) => {
   }
 
   const initialValues = {username:"", code:""}
-  const {inputs, handleInputChange, handleSubmit, handleOnClick} = useForm(handleConfirmSignup, initialValues);
+  const {inputs, handleInputChange, handleSubmit} = useForm(handleConfirmSignup, initialValues);
 
   return (
     <form className="SignupForm" onSubmit={handleSubmit}>
       {!username ?
         <fieldset>
           <legend>Email</legend>
-          <input type="text" name="username" onChange={handleInputChange} value={inputs.username} onClick={handleOnClick}/>
+          <input type="text" name="username" onChange={handleInputChange} value={inputs.username}/>
         </fieldset> : null
       }
       <fieldset>
         <legend>Confirmation Code</legend>
-        <input type="number" name="code" onChange={handleInputChange} value={inputs.code} onClick={handleOnClick}/>
+        <input type="number" name="code" onChange={handleInputChange} value={inputs.code}/>
       </fieldset>
       <button type="submit">Submit</button>
     </form>

@@ -19,22 +19,22 @@ export default ({setEmail, setCodeSent}) => {
   }
 
   const initialValues = {username:"", password:"", passwordConfirm:""}
-  const {inputs, handleInputChange, handleSubmit, handleOnClick} = useForm(handleSignup, initialValues);
+  const {inputs, handleInputChange, handleSubmit} = useForm(handleSignup, initialValues);
 
 
   return (
     <form className="SignupForm" onSubmit={handleSubmit}>
       <fieldset>
         <legend>Email</legend>
-        <input type="text" name="username" onChange={handleInputChange} value={inputs.username} onClick={handleOnClick}/>
+        <input type="text" name="username" onChange={handleInputChange} value={inputs.username}/>
       </fieldset>
       <fieldset>
         <legend>Password</legend>
-        <input type="password" name="password" onChange={handleInputChange} value={inputs.password} onClick={handleOnClick}/>
+        <input type="password" name="password" onChange={handleInputChange} value={inputs.password}/>
       </fieldset>
       <fieldset>
         <legend>Confirm Password</legend>
-        <input type="password" name="passwordConfirm" onChange={handleInputChange} value={inputs.passwordConfirm} onClick={handleOnClick}/>
+        <input type="password" name="passwordConfirm" onChange={handleInputChange} value={inputs.passwordConfirm}/>
       </fieldset>
       <button type="submit">Submit</button>
     </form>

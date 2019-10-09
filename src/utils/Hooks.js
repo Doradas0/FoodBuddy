@@ -15,15 +15,9 @@ const useForm = (callback, initialValues) => {
     event.persist();
     setInputs (inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
-  // extra handler to clear field for userInput
-  const handleOnClick = event => {
-    event.persist();
-    setInputs (inputs => ({...inputs, [event.target.name]: ''}));
-  }
   return {
     handleSubmit,
     handleInputChange,
-    handleOnClick,
     inputs
   };
 }
