@@ -1,13 +1,12 @@
-import React from 'react';
-import Routes from "../../utils/Routes";
+import React from "react";
 import "./App.css";
+import Routes from "../../utils/Routes";
+import Navbar from "../../components/Navbar";
 
-import Navbar from '../../components/Navbar';
-
-const App = () => {
+function App(props) {
   return (
-    <div className="App">
-      <Navbar/>
+    <div className="App container">
+      <Navbar />
       <Routes />
     </div>
   );

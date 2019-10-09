@@ -1,37 +1,23 @@
-import React, {useState} from "react";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./Navbar.css";
 
-import { Link } from "react-router-dom";
-
 export default () => {
-  const [isExpanded, toggleExpanded] = useState(false)
-
-  const collapse = () => {
-    toggleExpanded(false);
-  }
-
   return(
-    <div className="Navbar">
-      <div className="Brand">
-        <Link to="/">Food Buddy</Link>
-      </div>
-      <span className="menuToggle" onClick={() => toggleExpanded(!isExpanded)}>
-        <svg width="30" height="30">
-          <path d="M0,5 30,5" stroke="#333" strokeWidth="5"/>
-          <path d="M0,14 30,14" stroke="#333" strokeWidth="5"/>
-          <path d="M0,23 30,23" stroke="#333" strokeWidth="5"/>
-        </svg>
-      </span>
-      <div className="Nav">
-        <ul className={isExpanded ? "expanded" : "collapsed"}>
-          <Link to="/RecipeBook" onClick={collapse}><li>Recipe Book</li></Link>
-          <Link to="/MenuPlan" onClick={collapse}><li>Menu Plan</li></Link>
-          <Link to="/Pantry" onClick={collapse}><li>Pantry</li></Link>
-          <Link to="/ShoppingList" onClick={collapse}><li>ShoppingList</li></Link>
-
-        </ul>
-      </div>
-    </div>
-
+    <Navbar fluid collapseOnSelect>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <Link to="/">Scratch</Link>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+        <Nav pullRight>
+          <NavItem href="/signup">Signup</NavItem>
+          <NavItem href="/login">Login</NavItem>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
