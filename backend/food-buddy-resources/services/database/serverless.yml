@@ -1,0 +1,91 @@
+service: food-buddy-database
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  recipeTableName: ${self:custom.stage}-recipes
+  menuTableName: ${self:custom.stage}-menu
+  shoppingTableName: ${self:custom.stage}-shopping
+  inventoryTableName: ${self:custom.stage}-inventory
+
+
+provider:
+  name: aws
+  stage: dev
+  region: eu-west-1
+  runtime: nodejs10.x
+
+resources:
+  Resources:
+    RecipeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.recipeTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: recipeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: recipeId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    MenuTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.menuTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: menuId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: menuId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    ShoppingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.shoppingTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: shoppingId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: shoppingId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+
+  Outputs:
+    RecipeTableArn:
+      Value:
+        Fn::GetAtt:
+          - RecipeTable
+          - Arn
+      Export:
+        Name: ${self:custom.stage}-RecipeTableArn
+
+    MenuTableArn:
+      Value:
+        Fn::GetAtt:
+          - MenuTable
+          - Arn
+      Export:
+        Name: ${self:custom.stage}-MenuTableArn
+
+    ShoppingTableArn:
+      Value:
+        Fn::GetAtt:
+          - ShoppingTable
+          - Arn
+      Export:
+        Name: ${self:custom.stage}-ShoppingTableArn
