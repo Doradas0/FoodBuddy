@@ -56,10 +56,19 @@ functions:
     handler: get.main
     events:
       - http:
-        path: recipes/{id}
-        method: get
-        cors: true
-        authorizer: aws_iam
+          path: recipes/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  list:
+    handler: list.main
+    events:
+      - http:
+          path: recipes
+          method: get
+          cors: true
+          authorizer: aws_iam
 
 resources:
   # API Gateway Errors
