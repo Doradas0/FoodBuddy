@@ -11,11 +11,11 @@ export async function main(event, context, callback) {
     Item: {
       userId: event.requestContext.identity.cognitoIdentityId,
       recipeId: uuid.v1(),
-      name: data.name,
+      title: data.title,
       ingredients: data.ingredients,
-      method: data.method,
+      instructions: data.instructions,
       servings: data.servings,
-      time:data.time,
+      cookTime:data.cookTime,
       tags: data.tags,
       attachment: data.attachment,
       createdAt: Date.now()

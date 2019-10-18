@@ -1,7 +1,7 @@
 {
   "pathParameters": {
-    "id": "RECIPE_ID"
-  }
+    "id": "9604e750-f18c-11e9-80a1-972e55a54ba6"
+  },
   "requestContext": {
     "identity": {
       "cognitoIdentityId":"1"

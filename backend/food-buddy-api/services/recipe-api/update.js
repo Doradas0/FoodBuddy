@@ -1,7 +1,7 @@
 import * as dynamoDbLib from "../../libs/dynamodb-lib";
 import { success, failure } from "../../libs/response-lib";
 
-export async funtion main(event, context){
+export async function main(event, context){
   const data = JSON.parse(event.body);
   const params = {
     TableName:"dev-recipes",
@@ -9,13 +9,13 @@ export async funtion main(event, context){
       userId: event.requestContext.identity.cognitoIdentityId,
       recipeId: event.pathParameters.id
     },
-    UpdateExpression: "SET name = :name, ingredients = :ingredients, method = :method, servings = :servings, time = :time, tags = :tags, attachment = :attachment",
+    UpdateExpression: "SET title = :title, ingredients = :ingredients, instructions = :instructions, servings = :servings, cookTime = :cookTime, tags = :tags, attachment = :attachment",
     ExpressionAttributeValues: {
-      ":name": data.name || null,
+      ":title": data.title || null,
       ":ingredients": data.ingredients || null,
-      ":method": data.method || null,
+      ":instructions": data.instructions || null,
       ":servings": data.servings || null,
-      ":time": data.time || null,
+      ":cookTime": data.cookTime || null,
       ":tags": data.tags || null,
       ":attachment": data.attachment || null
     },

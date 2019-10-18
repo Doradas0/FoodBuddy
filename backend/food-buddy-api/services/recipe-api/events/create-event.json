@@ -1,4 +1,4 @@
-{"body": "{\"name\": \"eggs on toast\",\"ingredients\": [{\"item\":\"eggs\",\"quantity\":2,\"measurement\":\"large\"},{\"item\":\"bread\",\"quantity\":2,\"measurement\":\"slices\"}],\"method\": [\"cook eggs\",\"toast bread\"],\"servings\":2,\"time\": 15,\"tags\": [\"quick\",\"simple\",\"lunch\",\"snack\"],\"attachment\":\"eggs.jpg\"}",
+{"body": "{\"title\": \"eggs on toast\",\"ingredients\": [{\"item\":\"eggs\",\"quantity\":2,\"measurement\":\"large\"},{\"item\":\"bread\",\"quantity\":2,\"measurement\":\"slices\"}],\"instructions\": [\"cook eggs\",\"toast bread\"],\"servings\":2,\"cookTime\": 15,\"tags\": [\"quick\",\"simple\",\"lunch\",\"snack\"],\"attachment\":\"eggs.jpg\"}",
   "requestContext": {
     "identity": {
       "cognitoIdentityId":"1"
