@@ -70,6 +70,15 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  update:
+    handler: update.main
+    events:
+      - http:
+          path: recipes/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
 resources:
   # API Gateway Errors
   - ${file(libs/api-gateway-errors.yml)}
