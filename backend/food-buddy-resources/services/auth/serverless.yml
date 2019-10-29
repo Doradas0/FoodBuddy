@@ -127,4 +127,4 @@ resources:
       Value:
         Ref: CognitoAuthRole
       Export:
-        Name: ExtCognitoAuthRole-${self:custom.stage}
+        Name: CognitoAuthRole-${self:custom.stage}

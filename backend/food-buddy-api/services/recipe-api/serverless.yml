@@ -1,12 +1,10 @@
-# NOTE: update this with your service name
 service: food-buddy-recipe-api
 
-# Create an optimized package for our functions
 package:
   individually: true
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-bundle
   - serverless-offline
 
 custom: ${file(../../serverless.common.yml):custom}
