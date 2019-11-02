@@ -1,0 +1,6 @@
+.RecipeCard.Collapsed{
+  width: 70vw;
+  height: 50vw;
+  border: 1px solid #777;
+  box-shadow: 5px 10px #777;
+}
