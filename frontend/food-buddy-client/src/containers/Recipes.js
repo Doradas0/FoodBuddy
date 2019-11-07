@@ -7,6 +7,7 @@ export default function Recipes(props) {
 
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showNewRecipe, setShowNewRecipe] = useState(false);
 
   useEffect(() => {
     async function onLoad() {
@@ -33,14 +34,15 @@ export default function Recipes(props) {
   }
 
   function addRecipe(){
-    alert("Added Recipe");
+    setShowNewRecipe(true);
   }
 
   return (
     <div className="Recipes">
       <h1>The page with the recipes</h1>
-      <RecipeCard />
+      <RecipeCard cardSize="Collapsed"/>
       <NewButton onClick={addRecipe}/>
+      {showNewRecipe && <RecipeCard cardSize="Expanded" />}
     </div>
   );
 }
