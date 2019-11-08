@@ -1,10 +1,11 @@
 import React from "react";
 import "./RecipeCard.css";
 import DefaultImage from "../res/RecipeDefaultImage.jpg";
+import RecipeIngredient from "./RecipeIngredient";
 
-export default function RecipeCard(props) {
+export default function RecipeCard({cardSize, ...props}) {
   return(
-    <div className={"RecipeCard " + props.cardSize}>
+    <div className={"RecipeCard " + cardSize}>
       <div className="RecipeHeader">
         <img className="RecipeImage" src={DefaultImage} alt=""/>
         <div className="RecipeInfo">
@@ -14,11 +15,19 @@ export default function RecipeCard(props) {
         </div>
       </div>
       <div className="RecipeIngredients">
-
+        <RecipeIngredient quantity="Quantity" measurement="Measurement" item="Item"/>
+        <RecipeIngredientList />
       </div>
+
       <div className="RecipeInstructions">
 
       </div>
     </div>
+  )
+}
+
+function RecipeIngredientList() {
+  return(
+    <h1>Test</h1>
   )
 }

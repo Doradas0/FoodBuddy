@@ -5,7 +5,9 @@ import NewButton from "../components/NewButton";
 import RecipeCard from "../components/RecipeCard";
 export default function Recipes(props) {
 
+// eslint-disable-next-line
   const [recipes, setRecipes] = useState([]);
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   const [showNewRecipe, setShowNewRecipe] = useState(false);
 

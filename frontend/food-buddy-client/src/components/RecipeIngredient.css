@@ -1,0 +1,14 @@
+.RecipeIngredient{
+  display: grid;
+  list-style: none;
+  grid-template-columns: 20% 30% 1fr;
+  margin: 0;
+  padding: 0;
+}
+
+.RecipeIngredient li{
+  border: 1px solid #333;
+  border-radius: 15px;
+  margin: 2px;
+  padding: 1px;
+}
