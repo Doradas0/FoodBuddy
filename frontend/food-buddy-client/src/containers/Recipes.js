@@ -39,12 +39,20 @@ export default function Recipes(props) {
     setShowNewRecipe(true);
   }
 
+  const emptyRecipe = {
+    title:"",
+    ingredients:[],
+    method:[],
+    servings:"",
+    time:"",
+    attachment:""
+  }
+
   return (
     <div className="Recipes">
       <h1>The page with the recipes</h1>
-      <RecipeCard cardSize="Collapsed"/>
       <NewButton onClick={addRecipe}/>
-      {showNewRecipe && <RecipeCard cardSize="Expanded" />}
+      {showNewRecipe && <RecipeCard cardSize="Expanded" recipeData={emptyRecipe}/>}
     </div>
   );
 }
