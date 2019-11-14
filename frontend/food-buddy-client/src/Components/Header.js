@@ -11,9 +11,19 @@ export default props => {
       <IconButton edge="start" color="inherit" aria-label="menu">
         <MenuIcon />
       </IconButton>
-      {!props.authenticated
-        ?<UnauthenticatedToolBar />
-        :<AuthenticatedToolBar />
+      <Link
+        component="button"
+        variant="body2"
+        onClick={preventDefault}
+        to="/"
+        color="secondary"
+      >
+        Food Buddy
+      </Link>
+      {
+        // !props.authenticated
+        // ?<UnauthenticatedToolBar />
+        // :<AuthenticatedToolBar />
       }
     </Toolbar>
     </AppBar>
