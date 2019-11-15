@@ -1,41 +1,32 @@
 import React from "react";
+import {preventDefault} from "../Libs/Utils";
+import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton} from "@material-ui/core";
-import Link from '@material-ui/core/Link';
 import MenuIcon from "@material-ui/icons/Menu";
 import Button from '@material-ui/core/Button';
 
 export default props => {
   return (
-    <AppBar position="static">
+    <AppBar position="absolute">
     <Toolbar>
       <IconButton edge="start" color="inherit" aria-label="menu">
         <MenuIcon />
       </IconButton>
-      <Link
-        component="button"
-        variant="body2"
-        onClick={preventDefault}
-        to="/"
-        color="secondary"
-      >
-        Food Buddy
-      </Link>
+      <RouterLink to="/">Food Buddy</RouterLink>
       {
-        // !props.authenticated
-        // ?<UnauthenticatedToolBar />
-        // :<AuthenticatedToolBar />
+        !props.authenticated
+        ?<UnauthenticatedToolBar />
+        :<AuthenticatedToolBar />
       }
     </Toolbar>
     </AppBar>
   );
 }
 
-const preventDefault = event => event.preventDefault();
-
 const UnauthenticatedToolBar= props => {
   return(
-    <Button variant="contained">
-      <Link  onClick={preventDefault} to="/Login">Login</Link>
+    <Button onClick={preventDefault}>
+      <RouterLink to="/Signin">SignIn</RouterLink>
     </Button>
   );
 }
