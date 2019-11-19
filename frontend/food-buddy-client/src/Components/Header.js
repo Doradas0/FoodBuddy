@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from 'clsx';
-import {preventDefault} from "../Libs/Utils";
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -148,26 +147,5 @@ export default props => {
         </Toolbar>
       </AppBar>
     </div>
-  );
-}
-
-
-// <Hidden xsDown>
-//   {
-//     !props.authenticated
-//     ?<UnauthenticatedToolBar />
-//     :<AuthenticatedToolBar />
-//   }
-// </Hidden>
-
-const UnauthenticatedProfile = ({closeMenu, ...props}) => {
-  return(
-    "Un"
-  );
-}
-
-const AuthenticatedToolBar= props => {
-  return(
-    "Au"
   );
 }
