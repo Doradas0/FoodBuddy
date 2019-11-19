@@ -3,19 +3,28 @@ import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { AppBar, Toolbar, IconButton} from "@material-ui/core";
-import Typography from '@material-ui/core/Typography';
-import Hidden from '@material-ui/core/Hidden';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Drawer from '@material-ui/core/Drawer';
+import Popover from '@material-ui/core/Popover';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Badge from '@material-ui/core/Badge';
+import Hidden from '@material-ui/core/Hidden';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import FaceIcon from '@material-ui/icons/Face';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const drawerHeight = 208;
@@ -52,54 +61,48 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  RouterLink: {
+  routerLink: {
     textDecoration: "none",
     color: theme.palette.text.primary,
+    width: "100%",
+    height: "100%"
   },
 }));
 
-export default props => {
+export default ({appProps}) => {
   const classes = useStyles();
+
+  const [drawer, setDrawer] = React.useState(false);
+
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
 
   const [value, setValue] = React.useState(0);
 
-  const [state, setState] = React.useState({
-    top: false,
-    menu: false
-  });
+  const toggleDrawer = event => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawer(!drawer);
+  };
 
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+  const toggleProfilePopover = event => {
+    setProfileAnchorEl(profileAnchorEl ? null : event.currentTarget);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const toggleDrawer = (side) => event => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    setState({ ...state, [side]: !state.top });
-  };
-
-  const handleClick = event => {
-    setMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setMenuAnchorEl(null);
-  };
-
-  const fullList = side => (
+  const FullList = () => (
     <div
       className={classes.fullList}
       role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
+      onClick={toggleDrawer}
+      onKeyDown={toggleDrawer}
     >
       <List>
         {['Recipes', 'Menu', 'Pantry', 'Shopping'].map((text, index) => (
-          <RouterLink to={`/${text}`} key={text} className={classes.RouterLink}>
+          <RouterLink to={`/${text}`} key={text} className={classes.routerLink}>
             <ListItem button >
                 <ListItemText primary={text} />
             </ListItem>
@@ -109,16 +112,57 @@ export default props => {
     </div>
   );
 
+  const UnAuthProfile = () => (
+    <Paper>
+      <List>
+        <RouterLink onClick={toggleProfilePopover} key="SignIn" to="/SignIn" className={classes.routerLink}>
+          <ListItem button>
+              <ListItemText primary="Sign In" />
+          </ListItem>
+        </RouterLink>
+        <RouterLink onClick={toggleProfilePopover} key="SignUp" to="/SignUp" className={classes.routerLink}>
+          <ListItem button>
+              <ListItemText primary="Sign Up" />
+          </ListItem>
+        </RouterLink>
+      </List>
+    </Paper>
+  )
+
+  const AuthProfile = () => (
+    <Paper>
+      <Container className={classes.authProfile} maxWidth="xs">
+        <Badge
+          className={classes.margin}
+          badgeContent={<PhotoCameraIcon fontSize="small"/>}
+          color="primary"
+          overlap="circle"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right'}}
+        >
+          <Avatar className={classes.avatar}>
+            <FaceIcon className={classes.faceIcon} />
+          </Avatar>
+        </Badge>
+        <Typography className={classes.typography} variant="body1">
+          FirstName LastName
+        </Typography>
+        <Typography className={classes.typography} variant="body2">
+          FirstName.LastName@Address.com
+        </Typography>
+        <Divider className={classes.divider}  variant="middle"/>
+        <Button className={classes.button}>Change Password</Button>
+        <Button className={classes.button} variant="outlined" >Sign Out</Button>
+      </Container>
+    </Paper>
+  );
+
   return (
     <div className="Header">
-      <Drawer variant="persistent" anchor="top" open={state.top} onClose={toggleDrawer('top')}>
-      {fullList('top')}
-      </Drawer>
-      <AppBar position="static" className={clsx(classes.appBar, state.top && classes.appBarShift)}>
+      <AppBar position="static" className={clsx(classes.appBar, drawer && classes.appBarShift)}>
         <Toolbar className={classes.root}>
           <Typography variant="h6">Food Buddy</Typography>
           <Hidden mdUp>
-            <IconButton edge="start" color="inherit" aria-label="menu" className={classes.navigationBtn} onClick={toggleDrawer('top')}>
+            <IconButton edge="start" color="inherit" aria-label="menu" className={classes.navigationBtn} onClick={toggleDrawer}>
               <ExpandLessIcon />
             </IconButton>
           </Hidden>
@@ -130,22 +174,32 @@ export default props => {
               <Tab label="Shopping"/>
             </Tabs>
           </Hidden>
-          <IconButton onClick={handleClick} className={classes.profileBtn} edge="start" color="inherit" aria-label="menu">
+          <IconButton onClick={toggleProfilePopover} className={classes.profileBtn} edge="start" color="inherit" aria-label="menu">
             <AccountCircleIcon />
           </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={menuAnchorEl}
-            keepMounted
-            open={Boolean(menuAnchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
         </Toolbar>
       </AppBar>
+      <Drawer variant="persistent" anchor="top" open={drawer} onClose={toggleDrawer}>
+        <FullList />
+      </Drawer>
+      <Popover
+        onClose={toggleProfilePopover}
+        open={Boolean(profileAnchorEl)}
+        anchorEl={profileAnchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+          {appProps.isAuthenticated
+            ?<AuthProfile />
+            :<UnAuthProfile />
+          }
+      </Popover>
     </div>
   );
 }
