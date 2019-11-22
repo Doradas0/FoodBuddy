@@ -1,18 +1,19 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import AppliedRoute from "../Components/AppliedRoute";
+import AuthenticatedRoute from "../Components/AuthenticatedRoute";
+import UnauthenticatedRoute from "../Components/UnauthenticatedRoute";
 import Header from "../Components/Header";
 import Home from "../Containers/Home";
 import NotFound from "../Containers/NotFound";
-import SignIn from "../Containers/SignIn"
+import SignIn from "../Containers/SignIn";
 
 export default function Routes({ appProps }) {
   return (
     <React.Fragment>
       <Header appProps={appProps}/>
       <Switch>
-        <AppliedRoute path="/" exact component={Home} appProps={appProps} />
-        <AppliedRoute path="/SignIn" exact component={SignIn} appProps={appProps} />
+        <UnauthenticatedRoute path="/SignIn" exact component={SignIn} appProps={appProps} />
+        <AuthenticatedRoute path="/" exact component={Home} appProps={appProps} />
 
         { /* Finally, catch all unmatched routes */ }
         <Route component={NotFound} />
