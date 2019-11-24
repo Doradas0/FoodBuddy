@@ -1,4 +1,7 @@
 import React from 'react';
+import { Auth } from "aws-amplify";
+import { useFormFields } from "../Libs/hooksLib";
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -29,8 +32,33 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
+
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [fields, handleFieldChange] = useFormFields({
+    email: "",
+    password: ""
+  });
+
+  function validateForm() {
+    return fields.email.length > 0 && fields.password.length > 0;
+  }
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+    setIsLoading(true);
+
+    try {
+      await Auth.signIn(fields.email, fields.password);
+      props.userHasAuthenticated(true);
+      props.history.push("/");
+    } catch (e) {
+      alert(e.message);
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">

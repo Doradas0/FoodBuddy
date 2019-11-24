@@ -13,23 +13,23 @@ const App = () => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
 
-  // React.useEffect(() => {
-  //   onLoad();
-  // }, []);
-  //
-  // async function onLoad() {
-  //   try {
-  //     await Auth.currentSession();
-  //     userHasAuthenticated(true);
-  //   }
-  //   catch(e) {
-  //     if (e !== 'No current user') {
-  //       alert(e);
-  //     }
-  //   }
-  //
-  //   setIsAuthenticating(false);
-  // }
+  React.useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function onLoad() {
+    try {
+      await Auth.currentSession();
+      userHasAuthenticated(true);
+    }
+    catch(e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
+
+    setIsAuthenticating(false);
+  }
 
   return (
     <React.Fragment>
