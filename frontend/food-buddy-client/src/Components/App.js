@@ -12,6 +12,8 @@ const App = () => {
   // App State
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [currUser, setCurrUser] = useState(null);
+  const [currUserInfo, setCurrUserInfo] = useState(null);
 
   React.useEffect(() => {
     onLoad();
@@ -19,7 +21,8 @@ const App = () => {
 
   async function onLoad() {
     try {
-      await Auth.currentSession();
+      setCurrUser(await Auth.currentSession());
+      setCurrUserInfo(await Auth.currentUserInfo());
       userHasAuthenticated(true);
     }
     catch(e) {
@@ -32,10 +35,11 @@ const App = () => {
   }
 
   return (
+    !isAuthenticating &&
     <React.Fragment>
       <MuiThemeProvider theme={Theme}>
         <CssBaseline />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated }}/>
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, currUserInfo }}/>
       </MuiThemeProvider>
     </React.Fragment>
   );

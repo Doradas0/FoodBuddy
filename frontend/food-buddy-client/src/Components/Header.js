@@ -2,6 +2,8 @@ import React from "react";
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+// import { useHistory } from "react-router-dom";
+import { Auth } from "aws-amplify";
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -70,6 +72,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default ({appProps}) => {
+  // const history = useHistory();
   const classes = useStyles();
 
   const [drawer, setDrawer] = React.useState(false);
@@ -92,6 +95,13 @@ export default ({appProps}) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  async function handleLogout() {
+    toggleProfilePopover();
+    await Auth.signOut();
+    appProps.userHasAuthenticated(false);
+    // history.push("/SignIn");
+  }
 
   const FullList = () => (
     <div
@@ -151,7 +161,7 @@ export default ({appProps}) => {
         </Typography>
         <Divider className={classes.divider}  variant="middle"/>
         <Button className={classes.button}>Change Password</Button>
-        <Button className={classes.button} variant="outlined" >Sign Out</Button>
+        <Button onClick={handleLogout} className={classes.button} variant="outlined" >Sign Out</Button>
       </Container>
     </Paper>
   );
