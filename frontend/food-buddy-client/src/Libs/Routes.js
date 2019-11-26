@@ -6,6 +6,7 @@ import Header from "../Components/Header";
 import Home from "../Containers/Home";
 import NotFound from "../Containers/NotFound";
 import SignIn from "../Containers/SignIn";
+import SignUp from "../Containers/SignUp"
 
 export default function Routes({ appProps }) {
   return (
@@ -13,6 +14,7 @@ export default function Routes({ appProps }) {
       <Header appProps={appProps}/>
       <Switch>
         <UnauthenticatedRoute path="/SignIn" exact component={SignIn} appProps={appProps} />
+        <UnauthenticatedRoute path="/SignUp" exact component={SignUp} appProps={appProps} />
         <AuthenticatedRoute path="/" exact component={Home} appProps={appProps} />
 
         { /* Finally, catch all unmatched routes */ }

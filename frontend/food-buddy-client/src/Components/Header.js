@@ -2,7 +2,7 @@ import React from "react";
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import AppBar from '@material-ui/core/AppBar';
@@ -69,10 +69,44 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "100%"
   },
+  authProfile: {
+    padding: theme.spacing(1.5),
+    display: "flex",
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    width: theme.spacing(6),
+    height: theme.spacing(6)
+  },
+  faceIcon: {
+    width: "100%",
+    height: "100%",
+  },
+  button: {
+    margin: theme.spacing(0.5),
+    fontSize: "11px"
+  },
+  divider: {
+    margin: theme.spacing(0.5),
+    width: "100%"
+  },
+  name: {
+    margin: theme.spacing(0.5),
+    textTransform: "capitalize"
+  },
+  email: {
+    margin: theme.spacing(0.5),
+    textTransform: "none"
+  },
+  margin: {
+    margin: theme.spacing(2),
+  },
 }));
 
 export default ({appProps}) => {
-  // const history = useHistory();
+  const history = useHistory();
   const classes = useStyles();
 
   const [drawer, setDrawer] = React.useState(false);
@@ -100,7 +134,7 @@ export default ({appProps}) => {
     toggleProfilePopover();
     await Auth.signOut();
     appProps.userHasAuthenticated(false);
-    // history.push("/SignIn");
+    history.push("/SignIn");
   }
 
   const FullList = () => (

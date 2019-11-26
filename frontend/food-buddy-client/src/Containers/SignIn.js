@@ -1,15 +1,17 @@
 import React from 'react';
-import { Auth } from "aws-amplify";
+import { makeStyles } from '@material-ui/core/styles';
 import { useFormFields } from "../Libs/hooksLib";
+import { Auth } from "aws-amplify";
+
+import LoaderButton from "../Components/LoaderButton";
+import RouteLink from "../Components/RouteLink";
 
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +55,6 @@ export default function SignIn(props) {
     try {
       await Auth.signIn(fields.email, fields.password);
       props.userHasAuthenticated(true);
-      props.history.push("/");
     } catch (e) {
       alert(e.message);
       setIsLoading(false);
@@ -71,6 +72,7 @@ export default function SignIn(props) {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
+            onChange={handleFieldChange}
             variant="outlined"
             margin="normal"
             required
@@ -78,10 +80,11 @@ export default function SignIn(props) {
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
+            autoComplete="off"
             autoFocus
           />
           <TextField
+            onChange={handleFieldChange}
             variant="outlined"
             margin="normal"
             required
@@ -90,26 +93,32 @@ export default function SignIn(props) {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="off"
           />
-          <Button
+          <LoaderButton
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            isLoading={isLoading}
+            disabled={!validateForm()}
           >
             Sign In
-          </Button>
+          </LoaderButton>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link component={RouteLink} to="/ForgotPassword">
+                <Typography variant="body2">
+                  Forgot password?
+                </Typography>
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouteLink} to="/SignUp">
+                <Typography variant="body2">
                 Don't have an account?
+                </Typography>
               </Link>
             </Grid>
           </Grid>
