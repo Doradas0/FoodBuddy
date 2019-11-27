@@ -26,8 +26,13 @@ const App = () => {
       userHasAuthenticated(true);
     }
     catch(e) {
+      console.log(e);
       if (e !== 'No current user') {
-        alert(e);
+        if (e.message){
+          alert(e.message)
+        }else{
+          alert(e);
+        }
       }
     }
 
