@@ -20,8 +20,8 @@ export default function Recipes(props){
   const classes = useStyles();
 
   return(
-    <Container maxWidth="sm">
-
+    <Container>
+      <RecipeCard large/>
       <Fab className={classes.fab} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
