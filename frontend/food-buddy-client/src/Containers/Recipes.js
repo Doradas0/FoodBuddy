@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import { API } from "aws-amplify";
 import { makeStyles } from '@material-ui/core/styles';
 
 import RecipeCard from "../Components/RecipeCard";
@@ -18,13 +19,39 @@ const useStyles = makeStyles(theme => ({
 
 export default function Recipes(props){
   const classes = useStyles();
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    async function onLoad() {
+      if (!props.isAuthenticated) {
+        return;
+      }
+      try {
+        const recipes = await loadRecipes();
+        console.log(recipes);
+        setRecipes(recipes);
+      } catch (e) {
+        alert(e);
+      }
+      setIsLoading(false);
+    }
+    onLoad();
+  }, [props.isAuthenticated]);
+
+
+  function loadRecipes() {
+    return API.get("Food_Buddy_Recipe", "/recipes");
+  }
 
   return(
     <Container>
-      <RecipeCard large/>
       <Fab className={classes.fab} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
+      { !isLoading &&
+        <RecipeCard large recipe={recipes[0]} />
+      }
     </Container>
   )
 }

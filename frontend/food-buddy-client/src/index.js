@@ -7,14 +7,25 @@ import Amplify from 'aws-amplify';
 import Config from "./Components/Config";
 import App from './Components/App';
 
+const stage = "dev"
+
 Amplify.configure({
   Auth: {
     mandatorySignIn: true,
-    region: Config.cognito.REGION,
-    userPoolId: Config.cognito.USER_POOL_ID,
-    identityPoolId: Config.cognito.IDENTITY_POOL_ID,
-    userPoolWebClientId: Config.cognito.APP_CLIENT_ID
-  }
+    region: Config[stage].cognito.REGION,
+    userPoolId: Config[stage].cognito.USER_POOL_ID,
+    identityPoolId: Config[stage].cognito.IDENTITY_POOL_ID,
+    userPoolWebClientId: Config[stage].cognito.APP_CLIENT_ID
+  },
+  API: {
+   endpoints: [
+     {
+       name: Config[stage].apiGateway.Recipes.NAME,
+       endpoint: Config[stage].apiGateway.Recipes.URL,
+       region: Config[stage].apiGateway.Recipes.REGION,
+     },
+   ]
+ }
 });
 
 ReactDOM.render(

@@ -10,9 +10,12 @@ import Typography from '@material-ui/core/Typography';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme=>({
   smCard: {
     maxWidth: 345,
+  },
+  card:{
+    maxWidth: theme.breakpoints.values.sm,
   },
   media: {
     height: 140,
@@ -24,7 +27,7 @@ const useStyles = makeStyles({
   content: {
     backgroundColor: "red",
   }
-});
+}));
 
 export default function RecipeCard(props){
   console.log(props);
@@ -34,7 +37,7 @@ export default function RecipeCard(props){
 
   return(
     <Card
-      className={`${small && classes.smCard}`}
+      className={`${small && classes.smCard} ${classes.card}`}
     >
       <CardActionArea>
         <CardMedia
