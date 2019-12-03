@@ -7,13 +7,17 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import TextField from "@material-ui/core/TextField";
+import InputBase from '@material-ui/core/InputBase';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
 import TimerIcon from '@material-ui/icons/Timer'
-import LocalDiningIcon from '@material-ui/icons/LocalDining';;
+import LocalDiningIcon from '@material-ui/icons/LocalDining';
+
+import MethodList from "./MethodList"
 
 const useStyles = makeStyles(theme=>({
   smCard: {
@@ -56,11 +60,12 @@ const useStyles = makeStyles(theme=>({
 }));
 
 export default function RecipeCard({recipe, ...props}){
-  console.log(props);
+  console.log(recipe);
 
   const classes = useStyles();
   const [small, setSmall] = useState(!props.large);
-  const [tabValue, setTabValue] = useState(0)
+  const [tabValue, setTabValue] = useState(0);
+  const [recipeData, setRecipeData] = useState(recipe);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -69,6 +74,33 @@ export default function RecipeCard({recipe, ...props}){
   const handleChangeIndex = index => {
     setTabValue(index);
   };
+
+  const handleValueChange = e => {
+    e.persist();
+    console.log(e.target.name);
+    console.log(e.target.value);
+    console.log(
+      {[e.target.name]: e.target.value, ...recipeData}
+    );
+  }
+
+  const handleMethodChange = ({e,i}) => {
+    e.persist();
+    setRecipeData(
+      {instructions:[recipeData.instructions.splice(i,1,e.target.value)]
+      ,...recipeData}
+    );
+  }
+
+  const handleIngredientChange = ({e,i}) => {
+    e.persist()
+    setRecipeData(
+      {ingredients:[
+        recipeData.ingredients[i][e.target.name]:e.target.value
+      ]
+      ,...recipeData}
+    );
+  }
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -87,6 +119,26 @@ export default function RecipeCard({recipe, ...props}){
     );
   }
 
+  function IngredientList({ingredients}){
+    return ingredients.map((ingredient,i)=>(
+      <div className={classes.ingredientLine} key={i}>
+        <Typography component="p" variant="subtitle2" className={classes.ingredientItem}>
+          {ingredient.item}
+        </Typography>
+        <Typography component="p" variant="subtitle2" className={classes.ingredientQuantity}>
+          {ingredient.quantity}
+        </Typography>
+        <InputBase
+          key={i}
+          onChange={(e)=>handleMethodChange({e,i})}
+          className={classes.ingredientMeasurement}
+          name="quantity"
+          value={ingredient.measurement}
+        />
+      </div>
+    ))
+  }
+
   return(
     <Card
       className={`${small && classes.smCard} ${classes.card}`}
@@ -97,16 +149,19 @@ export default function RecipeCard({recipe, ...props}){
         title="Contemplative Reptile"
       />
       <div className={classes.basicInfoContainer}>
-        <Typography component="p" variant="subtitle1" className={classes.basicInfo}>
-          {recipe.title}
-        </Typography>
+        <InputBase
+          onChange={handleValueChange}
+          className={classes.basicInfo}
+          name="title"
+          value={recipeData.title}
+        />
         <Typography component="p" variant="subtitle1" className={classes.basicInfo}>
           <LocalDiningIcon fontSize="small" color="secondary"/>
-          {recipe.servings}
+          {recipeData.servings}
         </Typography>
         <Typography component="p" variant="subtitle1" className={classes.basicInfo}>
           <TimerIcon fontSize="small" color="secondary"/>
-          {recipe.cookTime}
+          {recipeData.cookTime}
         </Typography>
       </div>
       <CardContent
@@ -120,40 +175,12 @@ export default function RecipeCard({recipe, ...props}){
         <Tab label="Method"/>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <IngredientList ingredients={recipe.ingredients} />
+        <IngredientList ingredients={recipeData.ingredients} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <MethodList method={recipe.instructions}/>
+        <MethodList method={recipeData.instructions} handleChange={handleMethodChange}/>
       </TabPanel>
       </CardContent>
     </Card>
   )
-}
-
-function IngredientList({ingredients}){
-  const classes = useStyles();
-
-  return ingredients.map((ingredient,i)=>(
-    <div className={classes.ingredientLine} key={i}>
-      <Typography component="p" variant="subtitle2" className={classes.ingredientItem}>
-        {ingredient.item}
-      </Typography>
-      <Typography component="p" variant="subtitle2" className={classes.ingredientQuantity}>
-        {ingredient.quantity}
-      </Typography>
-      <Typography component="p" variant="subtitle2" className={classes.ingredientMeasurement}>
-        {ingredient.measurement}
-      </Typography>
-    </div>
-  ))
-}
-
-function MethodList({method}){
-  const classes = useStyles();
-
-  return method.map((step,i)=>(
-      <Typography key={i} component="p" variant="subtitle2" className={classes.methodStep}>
-        {step}
-      </Typography>
-  ))
 }
