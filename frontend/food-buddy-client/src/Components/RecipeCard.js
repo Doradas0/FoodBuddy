@@ -105,6 +105,18 @@ export default function RecipeCard({recipe, ...props}){
     setIngredients(x)
   }
 
+  const handleSave = () => {
+    console.log(recipe);
+    let recipeData = {
+      title:title,
+      servings:servings,
+      cookTime:cookTime,
+      ingredients:ingredients,
+      instructions:method
+    }
+    console.log(recipeData);
+  }
+
   return(
     <Card
       className={`${small && classes.smCard} ${classes.card}`}
@@ -155,6 +167,9 @@ export default function RecipeCard({recipe, ...props}){
       </TabPanel>
 
       </CardContent>
+      <button onClick={handleSave}>
+        Save
+      </button>
     </Card>
   )
 }
