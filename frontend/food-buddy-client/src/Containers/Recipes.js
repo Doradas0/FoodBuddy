@@ -29,7 +29,6 @@ export default function Recipes(props){
       }
       try {
         const recipes = await loadRecipes();
-        console.log(recipes);
         setRecipes(recipes);
       } catch (e) {
         alert(e);
