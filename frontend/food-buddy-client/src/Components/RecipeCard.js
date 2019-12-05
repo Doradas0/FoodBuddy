@@ -112,15 +112,8 @@ export default function RecipeCard({recipe, ...props}){
   }
 
   const handleSave = () => {
-    // console.log(recipe);
-    // let recipeData = {
-    //   title:title,
-    //   servings:servings,
-    //   cookTime:cookTime,
-    //   ingredients:ingredients,
-    //   instructions:method
-    // }
-    // console.log(recipeData);
+    console.log(recipe);
+    console.log(recipeData);
   }
 
   return(
