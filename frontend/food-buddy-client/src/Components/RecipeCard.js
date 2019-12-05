@@ -82,39 +82,45 @@ export default function RecipeCard({recipe, ...props}){
 
   const [small, setSmall] = useState(!props.large);
   const [tabValue, setTabValue] = useState(0);
-
-  const [title, setTitle] = useState(recipe.title);
-  const [servings, setServings] = useState(recipe.servings);
-  const [cookTime, setCookTime] = useState(recipe.cookTime);
-  const [ingredients, setIngredients] = useState([...recipe.ingredients]);
-  const [method, setMethod] = useState([...recipe.instructions]);
+  const [recipeData, setRecipeData] = useState({...recipe});
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
+  function setValue(e){
+    setRecipeData({
+      ...recipeData,
+      [e.target.name]: e.target.value
+    });
+  }
+
   function changemethod({e,i}){
-    let x = [...method];
+    let x = [...recipeData.instructions];
     x[i] = e.target.value;
-    setMethod(x);
+    let y = {...recipeData}
+    y.instructions = x;
+    setRecipeData(y);
   }
 
   function changeIngredient({e,i}){
-    let x = [...ingredients];
+    let x = [...recipeData.ingredients];
     x[i][e.target.name]=e.target.value;
-    setIngredients(x)
+    let y = {...recipeData}
+    y.ingredients = x;
+    setRecipeData(y);
   }
 
   const handleSave = () => {
-    console.log(recipe);
-    let recipeData = {
-      title:title,
-      servings:servings,
-      cookTime:cookTime,
-      ingredients:ingredients,
-      instructions:method
-    }
-    console.log(recipeData);
+    // console.log(recipe);
+    // let recipeData = {
+    //   title:title,
+    //   servings:servings,
+    //   cookTime:cookTime,
+    //   ingredients:ingredients,
+    //   instructions:method
+    // }
+    // console.log(recipeData);
   }
 
   return(
@@ -129,26 +135,26 @@ export default function RecipeCard({recipe, ...props}){
       <div className={classes.basicInfoContainer}>
         <InputBase
           className={classes.basicInfo}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={setValue}
           name="title"
-          value={title}
+          value={recipeData.title}
         />
         <div className={classes.basicInfoField}>
           <LocalDiningIcon fontSize="small" color="secondary"/>
           <InputBase
             className={classes.basicInfo}
-            onChange={(e) => setServings(e.target.value)}
+            onChange={setValue}
             name="servings"
-            value={servings}
+            value={recipeData.servings}
           />
         </div>
         <div className={classes.basicInfoField}>
           <TimerIcon fontSize="small" color="secondary"/>
           <InputBase
             className={classes.basicInfo}
-            onChange={(e) => setCookTime(e.target.value)}
+            onChange={setValue}
             name="cookTime"
-            value={cookTime}
+            value={recipeData.cookTime}
           />
         </div>
       </div>
@@ -160,10 +166,10 @@ export default function RecipeCard({recipe, ...props}){
         <Tab label="Method"/>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <IngredientList $ingredients={ingredients} changeIngredient={changeIngredient }/>
+        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient}/>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <MethodList method={method} changemethod={changemethod}/>
+        <MethodList method={recipeData.instructions} changemethod={changemethod}/>
       </TabPanel>
 
       </CardContent>
