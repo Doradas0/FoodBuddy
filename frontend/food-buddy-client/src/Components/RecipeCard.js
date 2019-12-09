@@ -138,9 +138,9 @@ export default function RecipeCard({recipe, ...props}){
     }
   }
 
-  // function removeLine(){
-  //
-  // }
+  function removeLine(){
+    console.log(1);
+  }
 
   const handleSave = () => {
     console.log(recipe);
