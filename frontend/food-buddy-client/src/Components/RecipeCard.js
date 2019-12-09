@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import InputBase from '@material-ui/core/InputBase';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
 import TimerIcon from '@material-ui/icons/Timer';
@@ -60,10 +61,10 @@ const useStyles = makeStyles(theme=>({
   },
   ingredientQuantity: {
     marginLeft: "auto",
-    width: "20px"
+    width: "30px"
   },
   ingredientMeasurement: {
-    width: "60px"
+    width: "70px"
   },
   methodList: {
     display: "flex",
@@ -73,11 +74,14 @@ const useStyles = makeStyles(theme=>({
     margin: "auto"
   },
   methodStep: {
-    borderBottom: `2px dotted ${theme.palette.secondary.main}`
+    borderBottom: `2px dotted ${theme.palette.secondary.main}`,
+    display: "flex",
+    justifyContent: "space-between",
   }
 }));
 
 export default function RecipeCard({recipe, ...props}){
+  console.log(recipe);
   const classes = useStyles();
 
   const [small, setSmall] = useState(!props.large);
@@ -110,6 +114,33 @@ export default function RecipeCard({recipe, ...props}){
     y.ingredients = x;
     setRecipeData(y);
   }
+
+  function newLine(e){
+    e.preventDefault();
+    if(tabValue === 0){
+      let x = [...recipeData.ingredients];
+      x.push({
+        item:`Item ${(x.length+1).toString()}`,
+        measurement:"Meas",
+        quantity:"Qty"
+      });
+      let y = {...recipeData}
+      y.ingredients = x;
+      setRecipeData(y);
+    }else if (tabValue === 1) {
+      let x = [...recipeData.instructions];
+      x.push(`Step ${(x.length+1).toString()}`)
+      let y = {...recipeData}
+      y.instructions = x;
+      setRecipeData(y);
+    }else {
+      console.log("err");
+    }
+  }
+
+  // function removeLine(){
+  //
+  // }
 
   const handleSave = () => {
     console.log(recipe);
@@ -159,10 +190,10 @@ export default function RecipeCard({recipe, ...props}){
         <Tab label="Method"/>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient}/>
+        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient} newLine={newLine}/>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <MethodList method={recipeData.instructions} changemethod={changemethod}/>
+        <MethodList method={recipeData.instructions} changemethod={changemethod} newLine={newLine} removeLine={removeLine}/>
       </TabPanel>
 
       </CardContent>
@@ -176,16 +207,23 @@ export default function RecipeCard({recipe, ...props}){
 function MethodList({method,...props}){
   const classes=useStyles();
   const steps = method.map((step,i)=>(
-    <InputBase
-      key={['step', i].join('_')}
-      onChange={(e)=>props.changemethod({e,i})}
-      value={step}
+    <div
       className={classes.methodStep}
-    />
+      key={['step', i].join('_')}
+    >
+      <InputBase
+        onChange={(e)=>props.changemethod({e,i})}
+        value={step}
+      />
+      <Button onClick={props.removeLine}>
+        x
+      </Button>
+    </div>
   ));
   return(
     <ul className={classes.methodList}>
       {steps}
+      <NewLineButton newLine={props.newLine}/>
     </ul>
   )
 }
@@ -218,6 +256,15 @@ function IngredientList({$ingredients,...props}){
   return(
     <ul className={classes.ingredientList}>
       {ingredients}
+      <NewLineButton newLine={props.newLine}/>
     </ul>
   )
+}
+
+function NewLineButton({newLine}){
+  return(
+    <Button onClick={newLine}>
+      New Line
+    </Button>
+  );
 }
