@@ -142,7 +142,6 @@ export default function RecipeCard({recipe, ...props}){
     let y = {...recipeData};
     y[list].splice(i,1);
     setRecipeData(y);
-    // const t = recipe[list][i]
   }
 
   const handleSave = () => {
