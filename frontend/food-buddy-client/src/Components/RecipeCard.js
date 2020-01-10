@@ -192,7 +192,7 @@ export default function RecipeCard({recipe, ...props}){
         <Tab label="Method"/>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient} newLine={newLine}/>
+        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient} newLine={newLine} removeLine={removeLine}/>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <MethodList method={recipeData.instructions} changemethod={changemethod} newLine={newLine} removeLine={removeLine}/>
@@ -253,6 +253,9 @@ function IngredientList({$ingredients,...props}){
         name="measurement"
         value={ingredient.measurement}
       />
+      <Button onClick={(e)=>props.removeLine(e,i,"ingredients")}>
+        x
+      </Button>
     </div>
   ));
   return(
