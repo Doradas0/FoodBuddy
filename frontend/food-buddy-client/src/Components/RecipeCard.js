@@ -81,7 +81,6 @@ const useStyles = makeStyles(theme=>({
 }));
 
 export default function RecipeCard({recipe, ...props}){
-  console.log(recipe);
   const classes = useStyles();
 
   const [small, setSmall] = useState(!props.large);
@@ -99,7 +98,7 @@ export default function RecipeCard({recipe, ...props}){
     });
   }
 
-  function changemethod({e,i}){
+  function changemethod(e,i){
     let x = [...recipeData.instructions];
     x[i] = e.target.value;
     let y = {...recipeData}
@@ -107,7 +106,7 @@ export default function RecipeCard({recipe, ...props}){
     setRecipeData(y);
   }
 
-  function changeIngredient({e,i}){
+  function changeIngredient(e,i){
     let x = [...recipeData.ingredients];
     x[i][e.target.name]=e.target.value;
     let y = {...recipeData}
@@ -138,8 +137,12 @@ export default function RecipeCard({recipe, ...props}){
     }
   }
 
-  function removeLine(){
-    console.log(1);
+  function removeLine(e,i,list){
+    e.preventDefault();
+    let y = {...recipeData};
+    y[list].splice(i,1);
+    setRecipeData(y);
+    // const t = recipe[list][i]
   }
 
   const handleSave = () => {
@@ -212,10 +215,10 @@ function MethodList({method,...props}){
       key={['step', i].join('_')}
     >
       <InputBase
-        onChange={(e)=>props.changemethod({e,i})}
+        onChange={(e)=>props.changemethod(e,i)}
         value={step}
       />
-      <Button onClick={props.removeLine}>
+      <Button onClick={(e)=>props.removeLine(e,i,"instructions")}>
         x
       </Button>
     </div>
@@ -234,20 +237,20 @@ function IngredientList({$ingredients,...props}){
     <div className={classes.ingredientLine} key={['ingredient', i].join('_')}>
       <InputBase
         className={classes.ingredientItem}
-        onChange={(e)=>props.changeIngredient({e,i})}
+        onChange={(e)=>props.changeIngredient(e,i)}
         name="item"
         value={ingredient.item}
       />
       <InputBase
         className={classes.ingredientQuantity}
-        onChange={(e)=>props.changeIngredient({e,i})}
+        onChange={(e)=>props.changeIngredient(e,i)}
         name="quantity"
         value={ingredient.quantity}
 
       />
       <InputBase
         className={classes.ingredientMeasurement}
-        onChange={(e)=>props.changeIngredient({e,i})}
+        onChange={(e)=>props.changeIngredient(e,i)}
         name="measurement"
         value={ingredient.measurement}
       />
