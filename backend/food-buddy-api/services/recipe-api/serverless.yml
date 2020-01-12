@@ -73,7 +73,7 @@ functions:
     events:
       - http:
           path: recipes/{id}
-          method: get
+          method: put
           cors: true
           authorizer: aws_iam
 

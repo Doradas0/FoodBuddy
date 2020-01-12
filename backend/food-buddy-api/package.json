@@ -4,7 +4,7 @@
   "description": "Defines the resources and functions for all the Food buddy API'S",
   "main": "config.js",
   "dependencies": {
-    "aws-xray-sdk": "^2.3.6"
+    "aws-xray-sdk": "^2.5.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.541.0",

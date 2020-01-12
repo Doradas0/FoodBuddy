@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API } from "aws-amplify";
 import { makeStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
@@ -8,10 +9,12 @@ import InputBase from '@material-ui/core/InputBase';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/Button';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
 import TimerIcon from '@material-ui/icons/Timer';
 import LocalDiningIcon from '@material-ui/icons/LocalDining';
+import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 
 import TabPanel from "./TabPanel";
 
@@ -64,7 +67,7 @@ const useStyles = makeStyles(theme=>({
     width: "30px"
   },
   ingredientMeasurement: {
-    width: "70px"
+    width: "70px",
   },
   methodList: {
     display: "flex",
@@ -77,15 +80,20 @@ const useStyles = makeStyles(theme=>({
     borderBottom: `2px dotted ${theme.palette.secondary.main}`,
     display: "flex",
     justifyContent: "space-between",
+  },
+  deleteBtn: {
+    padding: "0px",
+    width: ".5rem"
   }
 }));
 
 export default function RecipeCard({recipe, ...props}){
   const classes = useStyles();
-
   const [small, setSmall] = useState(!props.large);
   const [tabValue, setTabValue] = useState(0);
   const [recipeData, setRecipeData] = useState({...recipe});
+  const [isSaved, setisSaved] = useState(true);
+  console.log(recipeData);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -96,6 +104,7 @@ export default function RecipeCard({recipe, ...props}){
       ...recipeData,
       [e.target.name]: e.target.value
     });
+    setisSaved(false);
   }
 
   function changemethod(e,i){
@@ -104,6 +113,7 @@ export default function RecipeCard({recipe, ...props}){
     let y = {...recipeData}
     y.instructions = x;
     setRecipeData(y);
+    setisSaved(false);
   }
 
   function changeIngredient(e,i){
@@ -112,6 +122,7 @@ export default function RecipeCard({recipe, ...props}){
     let y = {...recipeData}
     y.ingredients = x;
     setRecipeData(y);
+    setisSaved(false);
   }
 
   function newLine(e){
@@ -126,12 +137,14 @@ export default function RecipeCard({recipe, ...props}){
       let y = {...recipeData}
       y.ingredients = x;
       setRecipeData(y);
+      setisSaved(false);
     }else if (tabValue === 1) {
       let x = [...recipeData.instructions];
       x.push(`Step ${(x.length+1).toString()}`)
       let y = {...recipeData}
       y.instructions = x;
       setRecipeData(y);
+      setisSaved(false);
     }else {
       console.log("err");
     }
@@ -142,11 +155,15 @@ export default function RecipeCard({recipe, ...props}){
     let y = {...recipeData};
     y[list].splice(i,1);
     setRecipeData(y);
+    setisSaved(false);
   }
 
-  const handleSave = () => {
-    console.log(recipe);
-    console.log(recipeData);
+  const handleSave = async () => {
+    const x = await API.put("Food_Buddy_Recipe", `/recipes/${recipeData.recipeId}`, {
+      body: recipeData
+    });
+    console.log(x);
+    setisSaved(true);
   }
 
   return(
@@ -199,9 +216,11 @@ export default function RecipeCard({recipe, ...props}){
       </TabPanel>
 
       </CardContent>
-      <button onClick={handleSave}>
-        Save
-      </button>
+      {!isSaved &&
+        <IconButton onClick={handleSave} color="primary">
+          <SaveTwoToneIcon/>
+        </IconButton>
+      }
     </Card>
   )
 }
@@ -217,9 +236,9 @@ function MethodList({method,...props}){
         onChange={(e)=>props.changemethod(e,i)}
         value={step}
       />
-      <Button onClick={(e)=>props.removeLine(e,i,"instructions")}>
+      <button className={classes.deleteBtn} onClick={(e)=>props.removeLine(e,i,"instructions")}>
         x
-      </Button>
+      </button>
     </div>
   ));
   return(
@@ -253,9 +272,9 @@ function IngredientList({$ingredients,...props}){
         name="measurement"
         value={ingredient.measurement}
       />
-      <Button onClick={(e)=>props.removeLine(e,i,"ingredients")}>
+      <button className={classes.deleteBtn} onClick={(e)=>props.removeLine(e,i,"ingredients")}>
         x
-      </Button>
+      </button>
     </div>
   ));
   return(
@@ -267,6 +286,7 @@ function IngredientList({$ingredients,...props}){
 }
 
 function NewLineButton({newLine}){
+  const classes=useStyles();
   return(
     <Button onClick={newLine}>
       New Line
