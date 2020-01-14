@@ -87,13 +87,12 @@ const useStyles = makeStyles(theme=>({
   }
 }));
 
-export default function RecipeCard({recipe, ...props}){
+export default function RecipeCard({recipe, appProps, ...props}){
   const classes = useStyles();
   const [small, setSmall] = useState(!props.large);
   const [tabValue, setTabValue] = useState(0);
   const [recipeData, setRecipeData] = useState({...recipe});
   const [isSaved, setisSaved] = useState(true);
-  console.log(recipeData);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -159,11 +158,31 @@ export default function RecipeCard({recipe, ...props}){
   }
 
   const handleSave = async () => {
-    const x = await API.put("Food_Buddy_Recipe", `/recipes/${recipeData.recipeId}`, {
+    try {
+      if (recipeData.recipeId) {
+        await updateRecipe()
+      }else {
+        await createRecipe()
+      }
+      setisSaved(true);
+    } catch (e) {
+      alert("Unable to save");
+      console.log(e);
+    }
+  }
+
+  const updateRecipe = () => {
+    return API.put("Food_Buddy_Recipe", `/recipes/${recipeData.recipeId}`, {
       body: recipeData
     });
-    console.log(x);
-    setisSaved(true);
+  }
+
+  const createRecipe = () => {
+    let y = {...recipeData};
+    y.userId = appProps.currUserInfo.id;
+    return API.post("Food_Buddy_Recipe", "/recipes", {
+      body: recipeData
+    });
   }
 
   return(
