@@ -19,8 +19,10 @@ const useStyles = makeStyles(theme => ({
   },
   modalContent:{
     margin: "auto",
-    marginTop: "72px",
+    marginTop: "60px",
     width: "100%",
+    height: "calc(100% - 60px)",
+    overflow: "scroll",
     maxWidth: theme.breakpoints.sm,
   }
 }));
@@ -55,6 +57,7 @@ export default function Recipes(props){
 
   function createRecipe() {
     setCurrentRecipe(EmptyRecipe);
+    setIsOpen(true);
   }
 
   function handleModalClose(){

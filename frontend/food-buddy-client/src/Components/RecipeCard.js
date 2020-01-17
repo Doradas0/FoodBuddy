@@ -32,8 +32,6 @@ const useStyles = makeStyles(theme=>({
     maxWidth: theme.breakpoints.values.sm,
     position: "relative",
     margin: "auto",
-    maxHeight: "80vh",
-    overflow: "scroll",
   },
   media: {
     height: theme.spacing(30),
@@ -42,7 +40,8 @@ const useStyles = makeStyles(theme=>({
   basicInfoContainer: {
     textTransform: "capitalize",
     position: "absolute",
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "1fr 85px 75px",
     top: theme.spacing(25),
     width: "100%",
     background: theme.palette.primary.main,
