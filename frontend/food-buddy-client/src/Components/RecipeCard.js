@@ -5,11 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import InputBase from '@material-ui/core/InputBase';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
 import TimerIcon from '@material-ui/icons/Timer';
@@ -27,7 +30,10 @@ const useStyles = makeStyles(theme=>({
   },
   card:{
     maxWidth: theme.breakpoints.values.sm,
-    position: "relative"
+    position: "relative",
+    margin: "auto",
+    maxHeight: "80vh",
+    overflow: "scroll",
   },
   media: {
     height: theme.spacing(30),
@@ -60,7 +66,7 @@ const useStyles = makeStyles(theme=>({
     flexDirection: "column",
     padding: 0,
     maxWidth: "500px",
-    margin: "auto"
+    margin: "auto",
   },
   ingredientQuantity: {
     marginLeft: "auto",
@@ -74,7 +80,7 @@ const useStyles = makeStyles(theme=>({
     flexDirection: "column",
     padding: 0,
     maxWidth: "500px",
-    margin: "auto"
+    margin: "auto",
   },
   methodStep: {
     borderBottom: `2px dotted ${theme.palette.secondary.main}`,
@@ -83,8 +89,17 @@ const useStyles = makeStyles(theme=>({
   },
   deleteBtn: {
     padding: "0px",
-    width: ".5rem"
-  }
+    width: ".5rem",
+    background: "none",
+    border: 0
+  },
+  tag: {
+    margin: theme.spacing(0.2,0.2)
+  },
+  tagInput: {
+    width: "100%",
+    padding: theme.spacing(0.5),
+  },
 }));
 
 export default function RecipeCard({recipe, appProps, ...props}){
@@ -93,6 +108,7 @@ export default function RecipeCard({recipe, appProps, ...props}){
   const [tabValue, setTabValue] = useState(0);
   const [recipeData, setRecipeData] = useState({...recipe});
   const [isSaved, setisSaved] = useState(true);
+  const [newTag, setNewTag] = useState("");
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -107,10 +123,10 @@ export default function RecipeCard({recipe, appProps, ...props}){
   }
 
   function changemethod(e,i){
-    let x = [...recipeData.instructions];
+    let x = [...recipeData.method];
     x[i] = e.target.value;
     let y = {...recipeData}
-    y.instructions = x;
+    y.method = x;
     setRecipeData(y);
     setisSaved(false);
   }
@@ -138,10 +154,10 @@ export default function RecipeCard({recipe, appProps, ...props}){
       setRecipeData(y);
       setisSaved(false);
     }else if (tabValue === 1) {
-      let x = [...recipeData.instructions];
+      let x = [...recipeData.method];
       x.push(`Step ${(x.length+1).toString()}`)
       let y = {...recipeData}
-      y.instructions = x;
+      y.method = x;
       setRecipeData(y);
       setisSaved(false);
     }else {
@@ -153,6 +169,24 @@ export default function RecipeCard({recipe, appProps, ...props}){
     e.preventDefault();
     let y = {...recipeData};
     y[list].splice(i,1);
+    setRecipeData(y);
+    setisSaved(false);
+  }
+
+  function addTag(e) {
+    if (e.key === "Enter" && newTag !== "") {
+      let y = {...recipeData};
+      y["tags"].push(newTag);
+      setRecipeData(y);
+      setNewTag("");
+      setisSaved(false);
+    };
+  }
+
+  function removeTag(i) {
+    console.log(i);
+    let y = {...recipeData};
+    y["tags"].splice(i,1);
     setRecipeData(y);
     setisSaved(false);
   }
@@ -185,10 +219,16 @@ export default function RecipeCard({recipe, appProps, ...props}){
     });
   }
 
+  const handleActionArea = (e) => {
+    if(!small){return}
+    props.handleRecipeSelect(recipeData);
+  }
+
   return(
     <Card
       className={`${small && classes.smCard} ${classes.card}`}
     >
+      <CardActionArea disabled={!small} onClick={handleActionArea}>
       <CardMedia
         className={classes.media}
         image={RecipeDefault}
@@ -220,19 +260,35 @@ export default function RecipeCard({recipe, appProps, ...props}){
           />
         </div>
       </div>
+      <TagList
+        tags={recipeData.tags}
+        removeTag={removeTag}
+        className={classes.tagList}
+      />
+      </CardActionArea>
       <CardContent
         className={`${small && classes.smContent} ${classes.content}`}
       >
-      <Tabs centered value={tabValue} onChange={handleTabChange} className={classes.tabs}>
-        <Tab label="Ingredients"/>
-        <Tab label="Method"/>
-      </Tabs>
-      <TabPanel value={tabValue} index={0}>
-        <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient} newLine={newLine} removeLine={removeLine}/>
-      </TabPanel>
-      <TabPanel value={tabValue} index={1}>
-        <MethodList method={recipeData.instructions} changemethod={changemethod} newLine={newLine} removeLine={removeLine}/>
-      </TabPanel>
+        <TextField
+        variant="outlined"
+        size="small"
+        className={classes.tagInput}
+        onChange={(e)=>setNewTag(e.target.value)}
+        onKeyUp={addTag}
+        name="newTag"
+        value={newTag}
+        placeholder="press enter to add tag"
+        />
+        <Tabs centered value={tabValue} onChange={handleTabChange} className={classes.tabs}>
+          <Tab label="Ingredients"/>
+          <Tab label="Method"/>
+        </Tabs>
+        <TabPanel value={tabValue} index={0}>
+          <IngredientList $ingredients={recipeData.ingredients} changeIngredient={changeIngredient} newLine={newLine} removeLine={removeLine}/>
+        </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          <MethodList method={recipeData.method} changemethod={changemethod} newLine={newLine} removeLine={removeLine}/>
+        </TabPanel>
 
       </CardContent>
       {!isSaved &&
@@ -255,7 +311,7 @@ function MethodList({method,...props}){
         onChange={(e)=>props.changemethod(e,i)}
         value={step}
       />
-      <button className={classes.deleteBtn} onClick={(e)=>props.removeLine(e,i,"instructions")}>
+      <button className={classes.deleteBtn} onClick={(e)=>props.removeLine(e,i,"method")}>
         x
       </button>
     </div>
@@ -301,14 +357,30 @@ function IngredientList({$ingredients,...props}){
       {ingredients}
       <NewLineButton newLine={props.newLine}/>
     </ul>
-  )
-}
+  );
+};
 
 function NewLineButton({newLine}){
-  const classes=useStyles();
   return(
     <Button onClick={newLine}>
       New Line
     </Button>
   );
+};
+
+const TagList = ({tags, ...props}) => {
+  const classes = useStyles();
+  if(!tags){
+    return;
+  }
+  return tags.map((tag,i) => (
+    <Chip
+      key={i}
+      label={tag}
+      className={classes.tag}
+      onDelete={()=>props.removeTag(i)}
+      color="secondary"
+      variant="outlined"
+    />
+  ));
 }

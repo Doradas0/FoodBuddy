@@ -6,7 +6,8 @@ export default {
     measurement:"Meas",
     quantity:"Qty"
   }],
-  instructions: ["Step 1"],
+  method: ["Step 1"],
   servings: "Servings",
-  title: "Title"
+  title: "Title",
+  tags: [],
 }
