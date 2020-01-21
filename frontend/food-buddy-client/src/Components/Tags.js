@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme=> ({
     padding: theme.spacing(0.5),
   },
   tagsContainer: {
-    maxWidth: "50%",
+    padding: "5px"
   },
   tag: {
     margin: theme.spacing(0,0.2)
@@ -50,7 +50,9 @@ export default function Tags({tags, ...props}){
 
   return(
     <div className={classes.root}>
-      <TagList />
+      <div className={classes.tagsContainer}>
+        <TagList />
+      </div>
       <TextField
         variant="outlined"
         size="small"

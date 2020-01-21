@@ -28,10 +28,8 @@ const useStyles = makeStyles(theme=>({
   smContent: {
     display: "none"
   },
-  card:{
-    maxWidth: theme.breakpoints.values.sm,
-    position: "relative",
-    margin: "auto",
+  content:{
+    paddingTop: 0,
   },
   media: {
     height: theme.spacing(30),

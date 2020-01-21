@@ -20,10 +20,10 @@ const useStyles = makeStyles(theme => ({
   modalContent:{
     margin: "auto",
     marginTop: "60px",
-    width: "100%",
-    height: "calc(100% - 60px)",
+    maxWidth: "600px",
+    maxHeight: "calc(100% - 60px)",
     overflow: "scroll",
-    maxWidth: theme.breakpoints.sm,
+    outline: "none",
   }
 }));
 
