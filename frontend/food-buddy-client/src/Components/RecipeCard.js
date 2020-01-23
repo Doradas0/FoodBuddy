@@ -22,11 +22,8 @@ import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 import TabPanel from "./TabPanel";
 
 const useStyles = makeStyles(theme=>({
-  smCard: {
-    maxWidth: 345,
-  },
-  smContent: {
-    display: "none"
+  card:{
+    maxWidth: theme.breakpoints.sm
   },
   content:{
     paddingTop: 0,
@@ -37,10 +34,8 @@ const useStyles = makeStyles(theme=>({
   },
   basicInfoContainer: {
     textTransform: "capitalize",
-    position: "absolute",
     display: "grid",
     gridTemplateColumns: "1fr 85px 75px",
-    top: theme.spacing(25),
     width: "100%",
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText
@@ -223,9 +218,8 @@ export default function RecipeCard({recipe, appProps, ...props}){
 
   return(
     <Card
-      className={`${small && classes.smCard} ${classes.card}`}
+      className={classes.card}
     >
-      <CardActionArea disabled={!small} onClick={handleActionArea}>
       <CardMedia
         className={classes.media}
         image={RecipeDefault}
@@ -262,7 +256,6 @@ export default function RecipeCard({recipe, appProps, ...props}){
         removeTag={removeTag}
         className={classes.tagList}
       />
-      </CardActionArea>
       <CardContent
         className={`${small && classes.smContent} ${classes.content}`}
       >
@@ -305,6 +298,7 @@ function MethodList({method,...props}){
       key={['step', i].join('_')}
     >
       <InputBase
+        multiline
         onChange={(e)=>props.changemethod(e,i)}
         value={step}
       />
