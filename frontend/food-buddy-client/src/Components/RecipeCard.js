@@ -106,7 +106,7 @@ export default function RecipeCard({recipe, appProps, ...props}){
     setTabValue(newValue);
   };
 
-  function setValue(e){
+  const setValue = (e) => {
     setRecipeData({
       ...recipeData,
       [e.target.name]: e.target.value
