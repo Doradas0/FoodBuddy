@@ -15,11 +15,12 @@ import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 
 import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
-import TimerIcon from '@material-ui/icons/Timer';
-import LocalDiningIcon from '@material-ui/icons/LocalDining';
 import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 
+
 import TabPanel from "./TabPanel";
+
+import RecipeBasicInfo from './RecipeComponents/RecipeBasicInfo';
 
 const useStyles = makeStyles(theme=>({
   card:{
@@ -101,6 +102,8 @@ export default function RecipeCard({recipe, appProps, ...props}){
   const [recipeData, setRecipeData] = useState({...recipe});
   const [isSaved, setisSaved] = useState(true);
   const [newTag, setNewTag] = useState("");
+
+console.log(recipeData);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -225,32 +228,10 @@ export default function RecipeCard({recipe, appProps, ...props}){
         image={RecipeDefault}
         title="Contemplative Reptile"
       />
-      <div className={classes.basicInfoContainer}>
-        <InputBase
-          className={classes.basicInfo}
-          onChange={setValue}
-          name="title"
-          value={recipeData.title}
-        />
-        <div className={classes.basicInfoField}>
-          <LocalDiningIcon fontSize="small" color="secondary"/>
-          <InputBase
-            className={classes.basicInfo}
-            onChange={setValue}
-            name="servings"
-            value={recipeData.servings}
-          />
-        </div>
-        <div className={classes.basicInfoField}>
-          <TimerIcon fontSize="small" color="secondary"/>
-          <InputBase
-            className={classes.basicInfo}
-            onChange={setValue}
-            name="cookTime"
-            value={recipeData.cookTime}
-          />
-        </div>
-      </div>
+      <RecipeBasicInfo
+        setRecipeData={setRecipeData}
+        recipeData={recipeData}
+      />
       <TagList
         tags={recipeData.tags}
         removeTag={removeTag}
