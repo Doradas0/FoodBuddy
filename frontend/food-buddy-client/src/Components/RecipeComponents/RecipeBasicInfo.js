@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme =>({
   },
 }));
 
-export default function RecipeBasicInfo({recipeData, setRecipeData, ...props}){
+export default ({recipeData, setRecipeData, ...props}) => {
   const classes = useStyles();
 
   const handleChange = (e) => {
