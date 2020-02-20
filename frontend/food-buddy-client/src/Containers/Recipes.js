@@ -2,28 +2,24 @@ import React, {useState} from "react";
 import { API } from "aws-amplify";
 import { makeStyles } from '@material-ui/core/styles';
 
+import MasonryGrid from "../Components/MasonryGrid";
 import RecipeCard from "../Components/RecipeCard";
 import EmptyRecipe from "../Components/EmptyRecipe";
 
 import Container from '@material-ui/core/Container';
 import Fab from '@material-ui/core/Fab';
-import Modal from '@material-ui/core/Modal';
 
 import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    // padding: 0,
+  },
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
-  },
-  modalContent:{
-    margin: "auto",
-    marginTop: "60px",
-    maxWidth: "600px",
-    maxHeight: "calc(100% - 60px)",
-    overflow: "scroll",
-    outline: "none",
+    zIndex: 1
   }
 }));
 
@@ -31,8 +27,6 @@ export default function Recipes(props){
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [curruntRecipe, setCurrentRecipe] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
 
   React.useEffect(() => {
     async function onLoad() {
@@ -55,37 +49,18 @@ export default function Recipes(props){
     return API.get("Food_Buddy_Recipe", "/recipes");
   }
 
-  function createRecipe() {
-    setCurrentRecipe(EmptyRecipe);
-    setIsOpen(true);
-  }
-
-  function handleModalClose(){
-    setIsOpen(false);
-    setCurrentRecipe(null);
-  }
-
-  function handleRecipeSelect(recipe){
-    setCurrentRecipe(recipe);
-    setIsOpen(true);
-  }
-
   return(
-    <Container>
-      <Fab onClick={createRecipe} className={classes.fab} color="primary" aria-label="add">
+    <Container className={classes.root}>
+      <Fab className={classes.fab} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
-      {!isLoading && recipes.map((recipe)=> (
-        <RecipeCard expanded key={recipe.recipeId} recipe={recipe} appProps={props} handleRecipeSelect={handleRecipeSelect}/>
-      ))}
-      <Modal
-        open={isOpen}
-        onClose={handleModalClose}
-      >
-        <div className={classes.modalContent}>
-        <RecipeCard recipe={curruntRecipe} large appProps={props}/>
-        </div>
-      </Modal>
+      {!isLoading &&
+        <MasonryGrid>
+          {recipes.map((recipe) =>
+            <RecipeCard key={recipe.recipeId} recipe={recipe} appProps={props}/>
+          )}
+        </MasonryGrid>
+      }
     </Container>
   )
 }

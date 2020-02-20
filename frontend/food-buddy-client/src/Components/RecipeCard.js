@@ -25,7 +25,7 @@ import MethodList from './RecipeComponents/MethodList';
 const useStyles = makeStyles(theme=>({
   card:{
     maxWidth: theme.breakpoints.values.sm,
-    margin: "auto"
+    margin: "9px auto"
   },
   content:{
     paddingTop: 0,
@@ -76,7 +76,7 @@ export default function RecipeCard({recipe, appProps, ...props}){
   }
 
   const CollapsedRecipeCard = () =>(
-    <Card className={classes.card}>
+    <Card className={classes.card} raised>
       <CardMedia
         className={classes.media}
         image={RecipeDefault}
@@ -88,7 +88,7 @@ export default function RecipeCard({recipe, appProps, ...props}){
   );
 
   const ExpandedRecipeCard = () =>(
-    <Card className={classes.card}>
+    <Card className={classes.card} raised>
       <CardMedia
         className={classes.media}
         image={RecipeDefault}
