@@ -24,7 +24,8 @@ import MethodList from './RecipeComponents/MethodList';
 
 const useStyles = makeStyles(theme=>({
   card:{
-    maxWidth: theme.breakpoints.sm
+    maxWidth: theme.breakpoints.values.sm,
+    margin: "auto"
   },
   content:{
     paddingTop: 0,
@@ -37,6 +38,8 @@ const useStyles = makeStyles(theme=>({
 
 export default function RecipeCard({recipe, appProps, ...props}){
   const classes = useStyles();
+
+  const isEditable=props.editable;
 
   const [tabValue, setTabValue] = useState(0);
   const [recipeData, setRecipeData] = useState({...recipe});
@@ -72,7 +75,7 @@ export default function RecipeCard({recipe, appProps, ...props}){
     });
   }
 
-  return(
+  const CollapsedRecipeCard = () =>(
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
@@ -81,23 +84,44 @@ export default function RecipeCard({recipe, appProps, ...props}){
       />
       <RecipeBasicInfo setRecipeData={setRecipeData} recipeData={recipeData}/>
       <TagList setRecipeData={setRecipeData} recipeData={recipeData}/>
+    </Card>
+  );
+
+  const ExpandedRecipeCard = () =>(
+    <Card className={classes.card}>
+      <CardMedia
+        className={classes.media}
+        image={RecipeDefault}
+        title="Default Dish Image"
+      />
+      <RecipeBasicInfo editable={isEditable} setRecipeData={setRecipeData} recipeData={recipeData}/>
+      <TagList editable={isEditable} setRecipeData={setRecipeData} recipeData={recipeData}/>
       <CardContent className={classes.content}>
+      {isEditable&&
         <NewTag setRecipeData={setRecipeData} recipeData={recipeData}/>
+      }
         <Tabs centered value={tabValue} onChange={handleTabChange} className={classes.tabs}>
           <Tab label="Ingredients"/>
           <Tab label="Method"/>
         </Tabs>
         <TabPanel value={tabValue} index={0}>
-          <IngredientList setRecipeData={setRecipeData} recipeData={recipeData}/>
+          <IngredientList editable={isEditable} setRecipeData={setRecipeData} recipeData={recipeData}/>
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          <MethodList setRecipeData={setRecipeData} recipeData={recipeData} />
+          <MethodList editable={isEditable} setRecipeData={setRecipeData} recipeData={recipeData} />
         </TabPanel>
 
       </CardContent>
+      {isEditable&&
       <IconButton onClick={handleSave} color="primary">
         <SaveTwoToneIcon/>
-      </IconButton>
+      </IconButton>}
     </Card>
-  )
+  );
+
+  return (props.expanded
+    ?<ExpandedRecipeCard />
+    :<CollapsedRecipeCard />
+  );
+
 }

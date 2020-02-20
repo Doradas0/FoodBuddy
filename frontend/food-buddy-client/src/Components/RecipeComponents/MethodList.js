@@ -28,6 +28,8 @@ const useStyles = makeStyles(theme =>({
 export default ({recipeData, setRecipeData, ...props}) => {
   const classes=useStyles();
 
+  const isDisabled=!props.editable;
+
   const changeMethod = (e,i) => {
     let x = [...recipeData.method];
     x[i] = e.target.value;
@@ -56,21 +58,25 @@ export default ({recipeData, setRecipeData, ...props}) => {
       key={['step', i].join('_')}
     >
       <InputBase
+        disabled={isDisabled}
         multiline
         onChange={(e)=>changeMethod(e,i)}
         value={step}
       />
-      <button className={classes.deleteBtn} onClick={(e)=>removeLine(e,i)}>
-        x
-      </button>
+      {!isDisabled&&
+        <button className={classes.deleteBtn} onClick={(e)=>removeLine(e,i)}>
+          x
+        </button>
+      }
     </div>
   ));
   return(
     <ul className={classes.methodList}>
       {steps}
-      <Button onClick={newLine}>
-        New Line
-      </Button>
+      {!isDisabled&&
+        <Button onClick={newLine}>
+          New Line
+        </Button>}
     </ul>
   );
 }

@@ -28,6 +28,8 @@ const useStyles = makeStyles(theme =>({
 export default ({recipeData, setRecipeData, ...props}) => {
   const classes = useStyles();
 
+  const isDisabled=!props.editable;
+
   const handleChange = (e) => {
     setRecipeData({
       ...recipeData,
@@ -35,34 +37,35 @@ export default ({recipeData, setRecipeData, ...props}) => {
     });
   };
 
-  return <Editable classes={classes} handleChange={handleChange} recipeData={recipeData}/>
-}
-
-const Editable = ({classes, handleChange, recipeData}) => (
-  <div className={classes.root}>
-    <InputBase
-      className={classes.input}
-      onChange={handleChange}
-      name="title"
-      value={recipeData.title}
-    />
-    <div className={classes.iconInputContainer}>
-      <LocalDiningIcon fontSize="small" color="secondary"/>
+  return (
+    <div className={classes.root}>
       <InputBase
+        disabled={isDisabled}
         className={classes.input}
         onChange={handleChange}
-        name="servings"
-        value={recipeData.servings}
+        name="title"
+        value={recipeData.title}
       />
+      <div className={classes.iconInputContainer}>
+        <LocalDiningIcon fontSize="small" color="secondary"/>
+        <InputBase
+          disabled={isDisabled}
+          className={classes.input}
+          onChange={handleChange}
+          name="servings"
+          value={recipeData.servings}
+        />
+      </div>
+      <div className={classes.iconInputContainer}>
+        <TimerIcon fontSize="small" color="secondary"/>
+        <InputBase
+          disabled={isDisabled}
+          className={classes.input}
+          onChange={handleChange}
+          name="cookTime"
+          value={recipeData.cookTime}
+        />
+      </div>
     </div>
-    <div className={classes.iconInputContainer}>
-      <TimerIcon fontSize="small" color="secondary"/>
-      <InputBase
-        className={classes.input}
-        onChange={handleChange}
-        name="cookTime"
-        value={recipeData.cookTime}
-      />
-    </div>
-  </div>
-);
+  )
+};

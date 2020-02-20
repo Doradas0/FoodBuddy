@@ -76,7 +76,7 @@ export default function Recipes(props){
         <AddIcon />
       </Fab>
       {!isLoading && recipes.map((recipe)=> (
-        <RecipeCard key={recipe.recipeId} recipe={recipe} appProps={props} handleRecipeSelect={handleRecipeSelect}/>
+        <RecipeCard expanded key={recipe.recipeId} recipe={recipe} appProps={props} handleRecipeSelect={handleRecipeSelect}/>
       ))}
       <Modal
         open={isOpen}
