@@ -16,11 +16,31 @@ export default ({recipeData, setRecipeData, ...props}) => {
     setRecipeData(recipeDeepCopy);
   }
   return (
-    <Removable
+    props.editable
+    ?<Removable
       tags={recipeData.tags}
       removeTag={removeTag}
     />
+    :<Standard
+      tags={recipeData.tags}
+    />
   )
+}
+
+const Standard = ({tags}) => {
+  const classes = useStyles();
+  if(!tags){
+    return;
+  }
+  return tags.map((tag,i) => (
+    <Chip
+      key={i}
+      label={tag}
+      className={classes.tag}
+      color="secondary"
+      variant="outlined"
+    />
+  ));
 }
 
 const Removable = ({tags, removeTag}) => {
