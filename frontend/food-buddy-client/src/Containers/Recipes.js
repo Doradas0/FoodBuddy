@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import { API } from "aws-amplify";
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
+import { getRecipeList } from "../Libs/ApiCalls";
 
-import MasonryGrid from "../Components/MasonryGrid";
+import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
-import EmptyRecipe from "../Components/EmptyRecipe";
+// import EmptyRecipe from "../Components/EmptyRecipe";
 
 import Container from '@material-ui/core/Container';
 import Fab from '@material-ui/core/Fab';
@@ -12,9 +12,6 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    // padding: 0,
-  },
   fab: {
     position: 'fixed',
     bottom: theme.spacing(2),
@@ -23,43 +20,44 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Recipes(props){
+export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ...props } ){
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const recipeId = props.match.params.id;
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   React.useEffect(() => {
     async function onLoad() {
-      if (!props.isAuthenticated) {
+      if (!isAuthenticated) {
         return;
       }
-      try {
-        const recipes = await loadRecipes();
-        setRecipes(recipes);
-      } catch (e) {
-        alert(e);
+      if (!recipeList){
+        try {
+          setRecipeList(await getRecipeList());
+        } catch (err) {
+          alert(err);
+        }
       }
-      setIsLoading(false);
+      if (recipeId && recipeList) {
+        setSelectedRecipe(recipeList.find(recipe => {
+          return recipe.recipeId === recipeId;
+        }));
+      }
+      if (!recipeId) {
+        setSelectedRecipe(null);
+      }
     }
     onLoad();
-  }, [props.isAuthenticated]);
-
-
-  function loadRecipes() {
-    return API.get("Food_Buddy_Recipe", "/recipes");
-  }
+  }, [isAuthenticated, recipeList, setRecipeList, recipeId]);
 
   return(
     <Container className={classes.root}>
       <Fab className={classes.fab} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
-      {!isLoading &&
-        <MasonryGrid>
-          {recipes.map((recipe) =>
-            <RecipeCard key={recipe.recipeId} recipe={recipe} appProps={props}/>
-          )}
-        </MasonryGrid>
+      {selectedRecipe
+        ?<RecipeCard recipe={selectedRecipe} expanded />
+        :<RecipeList recipeList={recipeList} appProps={props} />
       }
     </Container>
   )

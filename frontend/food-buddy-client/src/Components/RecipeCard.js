@@ -2,25 +2,24 @@ import React, { useState } from "react";
 import { API } from "aws-amplify";
 import { makeStyles } from '@material-ui/core/styles';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import IconButton from '@material-ui/core/IconButton';
-
-import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
-import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
-
-
+import RouteLink from "./RouteLink"
 import TabPanel from "./TabPanel";
-
 import RecipeBasicInfo from './RecipeComponents/RecipeBasicInfo';
 import TagList from './RecipeComponents/TagList';
 import NewTag from './RecipeComponents/NewTag';
 import IngredientList from './RecipeComponents/IngredientList';
 import MethodList from './RecipeComponents/MethodList';
 
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import IconButton from '@material-ui/core/IconButton';
+
+import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
+import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 
 const useStyles = makeStyles(theme=>({
   card:{
@@ -75,15 +74,23 @@ export default function RecipeCard({recipe, appProps, ...props}){
     });
   }
 
+  const handleCardSelect = event => {
+    // console.log(recipeData);
+  }
+
   const CollapsedRecipeCard = () =>(
     <Card className={classes.card} raised>
-      <CardMedia
-        className={classes.media}
-        image={RecipeDefault}
-        title="Contemplative Reptile"
-      />
-      <RecipeBasicInfo setRecipeData={setRecipeData} recipeData={recipeData}/>
-      <TagList setRecipeData={setRecipeData} recipeData={recipeData}/>
+      <CardActionArea onClick={handleCardSelect}>
+        <RouteLink to={`/Recipes/${recipeData.recipeId}`}>
+          <CardMedia
+            className={classes.media}
+            image={RecipeDefault}
+            title="Contemplative Reptile"
+          />
+          <RecipeBasicInfo setRecipeData={setRecipeData} recipeData={recipeData}/>
+          <TagList setRecipeData={setRecipeData} recipeData={recipeData}/>
+        </RouteLink>
+      </CardActionArea>
     </Card>
   );
 
