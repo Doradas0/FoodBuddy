@@ -14,6 +14,7 @@ const App = () => {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [currUser, setCurrUser] = useState(null);
   const [currUserInfo, setCurrUserInfo] = useState(null);
+  const [recipeList, setRecipeList] = useState(null);
 
   React.useEffect(() => {
     onLoad();
@@ -44,7 +45,7 @@ const App = () => {
     <React.Fragment>
       <MuiThemeProvider theme={Theme}>
         <CssBaseline />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, currUserInfo }}/>
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, currUserInfo, recipeList, setRecipeList }}/>
       </MuiThemeProvider>
     </React.Fragment>
   );
