@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { getRecipeList } from "../Libs/ApiCalls";
+import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiCalls";
 
 import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
@@ -42,35 +42,52 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
         setSelectedRecipe(recipeList.find(recipe => {
           return recipe.recipeId === recipeId;
         }));
+        setFabType('edit');
       }
       if (!recipeId) {
         setSelectedRecipe(null);
+        setFabType('new')
       }
     }
     onLoad();
   }, [isAuthenticated, recipeList, setRecipeList, recipeId]);
 
-  const handleFabClick = (event) => {
-    // if (fabType === "new") {
-    //   setSelectedRecipe(EmptyRecipe)
-    //   setFabType("save")
-    //   setIsEditable(true)
-    // }
-    // if (fabType === "edit") {
-    //   setFabType("save")
-    //   setIsEditable(true)
-    // }
-    // if (fabType === "save") {
-    //   setFabType("edit")
-    //   setIsEditable(false)
-    // }
+  const handleFabClick = async (event) => {
+    if (fabType === "new") {
+      setSelectedRecipe(EmptyRecipe)
+      setFabType("save")
+      setIsEditable(true)
+    }
+    if (fabType === "edit") {
+      setFabType("save")
+      setIsEditable(true)
+    }
+    if (fabType === "save") {
+      try {
+        await handleSave();
+        setFabType("edit")
+        setIsEditable(false)
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  const handleSave = async () => {
+    if (!selectedRecipe.recipeId) {
+      await createRecipe(selectedRecipe)
+      setRecipeList(await getRecipeList())
+    }else {
+      await updateRecipe(selectedRecipe)
+      setRecipeList(await getRecipeList())
+    }
   }
 
   return(
     <Container className={classes.root}>
       <RecipeFab handleClick={handleFabClick} type={fabType}/>
       {selectedRecipe
-        ?<RecipeCard recipe={selectedRecipe} expanded editable={isEditable} />
+        ?<RecipeCard recipe={selectedRecipe} setRecipe={setSelectedRecipe} expanded editable={isEditable} />
         :<RecipeList recipeList={recipeList} appProps={props} />
       }
     </Container>
