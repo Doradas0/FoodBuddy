@@ -74,13 +74,9 @@ export default function RecipeCard({recipe, appProps, ...props}){
     });
   }
 
-  const handleCardSelect = event => {
-    // console.log(recipeData);
-  }
-
   const CollapsedRecipeCard = () =>(
     <Card className={classes.card} raised>
-      <CardActionArea onClick={handleCardSelect}>
+      <CardActionArea>
         <RouteLink to={`/Recipes/${recipeData.recipeId}`}>
           <CardMedia
             className={classes.media}

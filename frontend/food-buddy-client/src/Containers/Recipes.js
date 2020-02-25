@@ -4,12 +4,10 @@ import { getRecipeList } from "../Libs/ApiCalls";
 
 import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
-// import EmptyRecipe from "../Components/EmptyRecipe";
+import RecipeFab from '../Components/RecipeFab';
+import EmptyRecipe from "../Components/EmptyRecipe";
 
 import Container from '@material-ui/core/Container';
-import Fab from '@material-ui/core/Fab';
-
-import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -25,6 +23,8 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
 
   const recipeId = props.match.params.id;
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [fabType, setFabType] = useState("new");
+  const [isEditable, setIsEditable] = useState(false);
 
   React.useEffect(() => {
     async function onLoad() {
@@ -50,13 +50,27 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
     onLoad();
   }, [isAuthenticated, recipeList, setRecipeList, recipeId]);
 
+  const handleFabClick = (event) => {
+    // if (fabType === "new") {
+    //   setSelectedRecipe(EmptyRecipe)
+    //   setFabType("save")
+    //   setIsEditable(true)
+    // }
+    // if (fabType === "edit") {
+    //   setFabType("save")
+    //   setIsEditable(true)
+    // }
+    // if (fabType === "save") {
+    //   setFabType("edit")
+    //   setIsEditable(false)
+    // }
+  }
+
   return(
     <Container className={classes.root}>
-      <Fab className={classes.fab} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
+      <RecipeFab handleClick={handleFabClick} type={fabType}/>
       {selectedRecipe
-        ?<RecipeCard recipe={selectedRecipe} expanded />
+        ?<RecipeCard recipe={selectedRecipe} expanded editable={isEditable} />
         :<RecipeList recipeList={recipeList} appProps={props} />
       }
     </Container>
