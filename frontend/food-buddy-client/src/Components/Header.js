@@ -105,7 +105,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({appProps}) => {
+export default ({ appProps }) => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -114,6 +114,8 @@ export default ({appProps}) => {
   const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
 
   const [value, setValue] = React.useState(0);
+
+  const pageList = ['Recipes', 'Menu', 'Pantry', 'Shopping'];
 
   const toggleDrawer = event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -128,6 +130,7 @@ export default ({appProps}) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    history.push(`/${pageList[newValue]}`)
   };
 
   async function handleLogout() {
@@ -145,7 +148,7 @@ export default ({appProps}) => {
       onKeyDown={toggleDrawer}
     >
       <List>
-        {['Recipes', 'Menu', 'Pantry', 'Shopping'].map((text, index) => (
+        {pageList.map((text, index) => (
           <RouterLink to={`/${text}`} key={text} className={classes.routerLink}>
             <ListItem button >
                 <ListItemText primary={text} />
