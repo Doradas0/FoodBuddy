@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme=>({
     height: theme.spacing(30),
     opacity: 0.5,
   },
+  link: {
+    textDecoration: 'none'
+  }
 }));
 
 export default ({ recipe }) => {
@@ -31,7 +34,7 @@ export default ({ recipe }) => {
   return(
     <Card className={classes.card} raised>
       <CardActionArea>
-        <RouteLink to={`/Recipes/${recipe.recipeId}`}>
+        <RouteLink className={classes.link} to={`/Recipes/${recipe.recipeId}`}>
           <CardMedia
             className={classes.media}
             image={RecipeDefault}

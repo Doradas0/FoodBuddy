@@ -149,11 +149,11 @@ export default ({ appProps }) => {
     >
       <List>
         {pageList.map((text, index) => (
-          <RouterLink to={`/${text}`} key={text} className={classes.routerLink}>
-            <ListItem button >
-                <ListItemText primary={text} />
-            </ListItem>
-          </RouterLink>
+          <ListItem key={text} button disabled={index > 0} >
+            <RouterLink to={`/${text}`} className={classes.routerLink}>
+              <ListItemText primary={text} />
+            </RouterLink>
+          </ListItem>
         ))}
       </List>
     </div>
@@ -216,9 +216,9 @@ export default ({ appProps }) => {
           <Hidden smDown>
             <Tabs value={value} onChange={handleChange} className={classes.navigationBar} aria-label="simple tabs example">
               <Tab label="Recipes"/>
-              <Tab label="Menu"/>
-              <Tab label="Pantry"/>
-              <Tab label="Shopping"/>
+              <Tab label="Menu" disabled/>
+              <Tab label="Pantry" disabled/>
+              <Tab label="Shopping" disabled/>
             </Tabs>
           </Hidden>
           <IconButton onClick={toggleProfilePopover} className={classes.profileBtn} edge="start" color="inherit" aria-label="menu">
