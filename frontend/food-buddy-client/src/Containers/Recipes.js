@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiCalls";
+import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiLib";
 
 import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";

@@ -4,7 +4,6 @@ import CollapsedRecipeCard from './CollapsedRecipeCard';
 
 export default function RecipeCard({recipe, setRecipe, ...props}){
   const isEditable=props.editable;
-
   return (props.expanded
     ?<ExpandedRecipeCard
       isEditable={isEditable}
@@ -15,5 +14,4 @@ export default function RecipeCard({recipe, setRecipe, ...props}){
       recipe={recipe}
     />
   );
-
 }

@@ -7,6 +7,7 @@ import TagList from './RecipeComponents/TagList';
 import NewTag from './RecipeComponents/NewTag';
 import IngredientList from './RecipeComponents/IngredientList';
 import MethodList from './RecipeComponents/MethodList';
+import UploadButton from './UploadButton';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -41,6 +42,9 @@ export default ({ isEditable, recipe, setRecipe }) =>{
   };
   return(
     <Card className={classes.card} raised>
+      {isEditable &&
+        <UploadButton />
+      }
       <CardMedia
         className={classes.media}
         image={RecipeDefault}
