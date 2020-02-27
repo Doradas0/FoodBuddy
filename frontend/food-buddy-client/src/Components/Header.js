@@ -191,13 +191,13 @@ export default ({ appProps }) => {
           </Avatar>
         </Badge>
         <Typography className={classes.typography} variant="body1">
-          FirstName LastName
+          {appProps.currUserInfo.attributes.given_name + " " + appProps.currUserInfo.attributes.family_name}
         </Typography>
         <Typography className={classes.typography} variant="body2">
-          FirstName.LastName@Address.com
+          {appProps.currUserInfo.attributes.email}
         </Typography>
         <Divider className={classes.divider}  variant="middle"/>
-        <Button className={classes.button}>Change Password</Button>
+        {/*<Button className={classes.button}>Change Password</Button>*/}
         <Button onClick={handleLogout} className={classes.button} variant="outlined" >Sign Out</Button>
       </Container>
     </Paper>
