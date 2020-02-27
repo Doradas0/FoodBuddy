@@ -50,6 +50,12 @@ export default ({ isEditable, recipe, setRecipe, attachment, setAttachment, ...p
     setTabValue(newValue);
   };
 
+  if (!attachment && recipe.attachment) {
+    attachment = recipe.attachment
+  }else if (attachment) {
+    attachment = URL.createObjectURL(attachment);
+  }
+
   return(
     <Card className={classes.card} raised>
       {isEditable &&
@@ -59,8 +65,8 @@ export default ({ isEditable, recipe, setRecipe, attachment, setAttachment, ...p
       }
       <CardMedia
         className={classes.media}
-        image={attachment ? URL.createObjectURL(attachment) :RecipeDefault}
-        title="Default Dish Image"
+        image={attachment ? attachment :RecipeDefault}
+        title="Recipe Image"
       />
       <RecipeBasicInfo editable={isEditable} setRecipeData={setRecipe} recipeData={recipe}/>
       <TagList editable={isEditable} setRecipeData={setRecipe} recipeData={recipe}/>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiLib";
-import { s3Upload } from '../Libs/StorageLib';
+import { s3Upload, s3Get } from '../Libs/StorageLib';
 
 import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
@@ -28,22 +28,24 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
 
   const recipeId = props.match.params.id;
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [fabValue, setFabValue] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
   const [attachment, setAttachment] = useState(null);
+  const [fabValue, setFabValue] = useState(0);
 
   React.useEffect(() => {
     async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
+      // Check user is authenticated
+      if (!isAuthenticated)return;
+      // Check recipeList exists, if not fetch recipeList
       if (!recipeList){
         try {
-          setRecipeList(await getRecipeList());
+          await getRecipes()
+          // setRecipeList(await getRecipeList());
         } catch (err) {
           alert(err);
         }
       }
+      // if recipeId in url set selected recipe to the mathcing recipe
       if (recipeId && recipeList) {
         setSelectedRecipe(recipeList.find(recipe => {
           return recipe.recipeId === recipeId;
@@ -56,34 +58,53 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
       }
     }
     onLoad();
-  }, [isAuthenticated, recipeList, setRecipeList, recipeId]);
+  }, [isAuthenticated, recipeList, recipeId]);
 
+  const getRecipes = () => {
+    getRecipeList().then(result => {
+      processRecipes(result);
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  const processRecipes = async recipes => {
+    Promise.all(recipes.map(async recipe => {
+      if(recipe.attachment){
+        recipe.attachment = await s3Get(recipe.attachment);
+      }
+      return recipe;
+    })).then(result => {
+      setRecipeList(result);
+    });
+  }
+
+
+
+// Fab interactions
   const handleFabClick = async (event) => {
+    // New Button Click
     if (fabValue === 0) {
-      setSelectedRecipe(EmptyRecipe)
-      setFabValue(2)
-      setIsEditable(true)
+      setSelectedRecipe(EmptyRecipe);
+      setFabValue(2);
+      setIsEditable(true);
     }
+    // Edit Button Click
     if (fabValue === 1) {
       setFabValue(2);
-      setIsEditable(true)
+      setIsEditable(true);
     }
+    // Save Button Click
     if (fabValue === 2) {
-      try {
-        await handleSave();
-        setFabValue(1)
-        setIsEditable(false)
-      } catch (err) {
-        console.log(err);
-      }
+      await handleSave();
+      setFabValue(1);
+      setIsEditable(false);
     }
   }
 
   const handleSave = async () => {
-    console.log(attachment);
     if (attachment) {
       s3Upload(attachment).then(async result => {
-        console.log(result);
         await postRecipe(result);
       }).catch(err => {
         console.log(err);
@@ -91,7 +112,6 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
     }else {
       await postRecipe(null);
     }
-    setRecipeList(await getRecipeList())
   }
 
   const postRecipe = async (attachment) => {
@@ -101,6 +121,7 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
     }else {
       await updateRecipe(selectedRecipe)
     }
+    await getRecipes()
   }
 
   const fabs = [

@@ -4,10 +4,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Zoom from '@material-ui/core/Zoom';
 
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-
 const useStyles = makeStyles(theme => ({
   fab: {
     position: 'fixed',

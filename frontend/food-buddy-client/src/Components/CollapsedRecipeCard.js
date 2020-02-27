@@ -37,8 +37,8 @@ export default ({ recipe }) => {
         <RouteLink className={classes.link} to={`/Recipes/${recipe.recipeId}`}>
           <CardMedia
             className={classes.media}
-            image={RecipeDefault}
-            title="Contemplative Reptile"
+            image={recipe.attachment ? recipe.attachment :RecipeDefault}
+            title="Recipe Image"
           />
           <RecipeBasicInfo recipeData={recipe}/>
           <TagList recipeData={recipe}/>
