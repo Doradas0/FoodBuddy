@@ -13,5 +13,9 @@ export default {
         URL: "https://udm04yd5tf.execute-api.eu-west-1.amazonaws.com/dev"
       },
     },
+    s3: {
+      REGION: 'eu-west-1',
+      BUCKET: 'food-buddy-uploads-dev-s3bucket-2yb3b14neoww'
+    }
   }
 };

@@ -15,13 +15,13 @@ export default props => {
   const classes = useStyles();
 
   return(
-    <div className="uploadButton">
-      <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+    <React.Fragment>
+      <input onChange={props.handleFileChange} accept="image/*" className={classes.input} id="icon-button-file" type="file" />
       <label htmlFor="icon-button-file">
         <IconButton color="primary" aria-label="upload picture" component="span">
           <PhotoCamera />
         </IconButton>
       </label>
-    </div>
+    </React.Fragment>
   )
 }

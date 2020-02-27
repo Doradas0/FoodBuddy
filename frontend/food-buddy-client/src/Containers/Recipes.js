@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiLib";
+import { s3Upload } from '../Libs/StorageLib';
 
 import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
@@ -25,6 +26,9 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [fabType, setFabType] = useState("new");
   const [isEditable, setIsEditable] = useState(false);
+  const [attachment, setAttachment] = useState(null);
+
+  console.log(selectedRecipe);
 
   React.useEffect(() => {
     async function onLoad() {
@@ -74,12 +78,26 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
   }
 
   const handleSave = async () => {
+    console.log(attachment);
+    if (attachment) {
+      s3Upload(attachment).then(async result => {
+        console.log(result);
+        await postRecipe(result);
+      }).catch(err => {
+        console.log(err);
+      });
+    }else {
+      await postRecipe(null);
+    }
+    setRecipeList(await getRecipeList())
+  }
+
+  const postRecipe = async (attachment) => {
+    selectedRecipe.attachment = attachment;
     if (!selectedRecipe.recipeId) {
       await createRecipe(selectedRecipe)
-      setRecipeList(await getRecipeList())
     }else {
       await updateRecipe(selectedRecipe)
-      setRecipeList(await getRecipeList())
     }
   }
 
@@ -87,7 +105,7 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
     <Container className={classes.root}>
       <RecipeFab handleClick={handleFabClick} type={fabType}/>
       {selectedRecipe
-        ?<RecipeCard recipe={selectedRecipe} setRecipe={setSelectedRecipe} expanded editable={isEditable} />
+        ?<RecipeCard recipe={selectedRecipe} setRecipe={setSelectedRecipe} attachment={attachment} setAttachment={setAttachment} expanded editable={isEditable} />
         :<RecipeList recipeList={recipeList} appProps={props} />
       }
     </Container>

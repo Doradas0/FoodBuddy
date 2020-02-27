@@ -29,25 +29,37 @@ const useStyles = makeStyles(theme=>({
     height: theme.spacing(30),
     opacity: 0.5,
   },
+  uploadBtn: {
+    position: "absolute",
+    zIndex: "1",
+  }
 }));
 
 
-export default ({ isEditable, recipe, setRecipe }) =>{
+export default ({ isEditable, recipe, setRecipe, attachment, setAttachment, ...props }) =>{
   const classes = useStyles();
 
   const [tabValue, setTabValue] = useState(0);
 
+  const handleFileChange = (event) => {
+    event.persist();
+    setAttachment(event.target.files[0]);
+  }
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   return(
     <Card className={classes.card} raised>
       {isEditable &&
-        <UploadButton />
+        <div className={classes.uploadBtn}>
+          <UploadButton handleFileChange={handleFileChange}/>
+        </div>
       }
       <CardMedia
         className={classes.media}
-        image={RecipeDefault}
+        image={attachment ? URL.createObjectURL(attachment) :RecipeDefault}
         title="Default Dish Image"
       />
       <RecipeBasicInfo editable={isEditable} setRecipeData={setRecipe} recipeData={recipe}/>

@@ -25,6 +25,11 @@ Amplify.configure({
        region: Config[stage].apiGateway.Recipes.REGION,
      },
    ]
+ },
+ Storage: {
+   region: Config[stage].s3.REGION,
+   bucket: Config[stage].s3.BUCKET,
+   identityPoolId: Config[stage].cognito.IDENTITY_POOL_ID
  }
 });
 
