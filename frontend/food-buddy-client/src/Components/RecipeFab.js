@@ -1,7 +1,8 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import Fab from '@material-ui/core/Fab';
+import Zoom from '@material-ui/core/Zoom';
 
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -16,34 +17,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default ({handleClick, type}) => {
+export default ({handleClick, fabs, value}) => {
   const classes = useStyles();
+  const theme = useTheme();
 
-  const typeMap = {
-    new: {
-      icon: <AddIcon />,
-      color: "primary",
-    },
-    edit: {
-      icon: <EditIcon />,
-      color: "secondary"
-    },
-    save: {
-      icon: <SaveOutlinedIcon />,
-      color: "primary"
-    },
-  }
-
-
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
+  };
 
   return(
-    <Fab
-      onClick={handleClick}
-      className={classes.fab}
-      color={typeMap[type].color}
-      aria-label="add"
-    >
-      {typeMap[type].icon}
-    </Fab>
+    <React.Fragment>
+    {fabs.map((fab, index) => (
+      <Zoom
+        key={index}
+        in={value === index}
+        timeout={transitionDuration}
+        style={{
+          transitionDelay: `${value === index ? transitionDuration.exit : 0}ms`,
+        }}
+        unmountOnExit
+      >
+        <Fab onClick={handleClick} aria-label={fab.label} className={classes.fab} color={fab.color}>
+          {fab.icon}
+        </Fab>
+      </Zoom>
+    ))}
+    </React.Fragment>
   );
 }

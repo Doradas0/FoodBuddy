@@ -10,6 +10,10 @@ import EmptyRecipe from "../Components/EmptyRecipe";
 
 import Container from '@material-ui/core/Container';
 
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+
 const useStyles = makeStyles(theme => ({
   fab: {
     position: 'fixed',
@@ -24,11 +28,9 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
 
   const recipeId = props.match.params.id;
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [fabType, setFabType] = useState("new");
+  const [fabValue, setFabValue] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
   const [attachment, setAttachment] = useState(null);
-
-  console.log(selectedRecipe);
 
   React.useEffect(() => {
     async function onLoad() {
@@ -46,30 +48,30 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
         setSelectedRecipe(recipeList.find(recipe => {
           return recipe.recipeId === recipeId;
         }));
-        setFabType('edit');
+        setFabValue(1);
       }
       if (!recipeId) {
         setSelectedRecipe(null);
-        setFabType('new')
+        setFabValue(0)
       }
     }
     onLoad();
   }, [isAuthenticated, recipeList, setRecipeList, recipeId]);
 
   const handleFabClick = async (event) => {
-    if (fabType === "new") {
+    if (fabValue === 0) {
       setSelectedRecipe(EmptyRecipe)
-      setFabType("save")
+      setFabValue(2)
       setIsEditable(true)
     }
-    if (fabType === "edit") {
-      setFabType("save")
+    if (fabValue === 1) {
+      setFabValue(2);
       setIsEditable(true)
     }
-    if (fabType === "save") {
+    if (fabValue === 2) {
       try {
         await handleSave();
-        setFabType("edit")
+        setFabValue(1)
         setIsEditable(false)
       } catch (err) {
         console.log(err);
@@ -101,9 +103,27 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ..
     }
   }
 
+  const fabs = [
+    {
+      color: 'primary',
+      icon: <AddIcon />,
+      label: 'Add',
+    },
+    {
+      color: 'secondary',
+      icon: <EditIcon />,
+      label: 'Edit',
+    },
+    {
+      color: 'primary',
+      icon: <SaveOutlinedIcon />,
+      label: 'Save',
+    }
+  ]
+
   return(
     <Container className={classes.root}>
-      <RecipeFab handleClick={handleFabClick} type={fabType}/>
+      <RecipeFab handleClick={handleFabClick} fabs={fabs} value={fabValue}/>
       {selectedRecipe
         ?<RecipeCard recipe={selectedRecipe} setRecipe={setSelectedRecipe} attachment={attachment} setAttachment={setAttachment} expanded editable={isEditable} />
         :<RecipeList recipeList={recipeList} appProps={props} />
